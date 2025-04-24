@@ -1,4 +1,5 @@
 #Requires AutoHotkey v2.0
+#SingleInstance Force
 
 ^!w::  ; Press Ctrl + Alt + W to trigger
 {
@@ -14,6 +15,7 @@
         if WinExist(winID) {
             winState := WinGetMinMax("ahk_id " winID)
             title := WinGetTitle(winID)
+            class := WinGetClass(winID)
             WinGetPos(&x, &y, &w, &h, winID)
             pid := WinGetPID(winID)
             exePath := ProcessGetPath(pid)
@@ -88,6 +90,7 @@
             if title && w && h {
                 section := "window" windowIndex
                 IniWrite title, iniFile, section, "title"
+                IniWrite class, iniFile, section, "class"
                 IniWrite windowIndex, iniFile, section, "index"
                 IniWrite winID, iniFile, section, "id"
                 IniWrite x, iniFile, section, "x"

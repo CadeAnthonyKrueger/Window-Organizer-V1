@@ -3,11 +3,26 @@
 
 ^!c::  ; Ctrl + Alt + C
 {
+
+    ; Helpers
+    arrayToMap(arr) {
+        map := Map.Call()
+        for item in arr {
+            map[item] := true
+        }
+        return map
+    }
+
     masterIni := A_ScriptDir "\window_test.ini"
 
     if !FileExist(masterIni) {
         MsgBox "INI file not found:`n" masterIni
         return
+    }
+
+    currentWindowIDs := Map()
+    for id in WinGetList() {
+        currentWindowIDs[id] := true
     }
 
     sectionsText := IniRead(masterIni, , , "")
@@ -18,6 +33,8 @@
         y        := IniRead(masterIni, section, "y", 0)
         width    := IniRead(masterIni, section, "width", 800)
         height   := IniRead(masterIni, section, "height", 600)
+        title    := IniRead(masterIni, section, "title", "")
+        class    := IniRead(masterIni, section, "class", "")
         url      := IniRead(masterIni, section, "urlList", "")
         filePath := IniRead(masterIni, section, "filePath", "")
 
@@ -36,19 +53,32 @@
         }
 
         ; Run the program and get its process ID
-        Run Format('"{}"{}', filePath, urlArgs), , , &pid
-        Sleep(100)
-        ; Get the active window's ID
-        WinActivate("ahk_pid " pid)
-        hwnd := WinGetID("A")
+        Run(Format('"{}"{}', filePath, urlArgs), , , &pid)
 
-        if hwnd {
-            WinActivate("ahk_id " hwnd)
-            Sleep(300)
-            WinRestore("ahk_id " hwnd)
-            Sleep(300)
-            WinMove x, y, width, height, "ahk_id " hwnd
+        Loop {
+            newWindowIDs := Map()
+            for id in WinGetList() {
+                newWindowIDs[id] := true
+            }
+            if newWindowIDs.Count > currentWindowIDs.Count {
+                for winID in newWindowIDs {
+                    if !(currentWindowIDs.Has(winID)) {
+                        hwnd := winID
+                        currentWindowIDs[winID] := true
+                        break
+                    }
+                }
+                break
+            }
+            Sleep(100)
         }
+
+        WinActivate("ahk_id " hwnd)
+        Sleep(300)
+        WinRestore("ahk_id " hwnd)
+        Sleep(300)
+        WinMove x, y, width, height, "ahk_id " hwnd
         Sleep(400)
     }
+
 }
