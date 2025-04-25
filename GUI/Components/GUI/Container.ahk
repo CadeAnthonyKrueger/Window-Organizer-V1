@@ -3,6 +3,7 @@
 #Include ../../MainGUI.ahk
 #Include ../Utility/Dimension.ahk
 
+; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
 class Container {
     __New(dim, parentContainer := 0, color := "0xffffff") {
         this.parentContainer := parentContainer
