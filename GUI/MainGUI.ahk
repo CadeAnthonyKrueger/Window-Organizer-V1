@@ -13,7 +13,7 @@ titleButtonX := titleBarWidth - titleButtonWidth
 TraySetIcon A_ScriptDir "\Assets\logo.ico"  ; Set tray & GUI icon
 
 ; Create GUI without standard window border (to allow custom title bar)
-global myGui := Gui("-Caption +Resize +AlwaysOnTop", "Window Organizer")
+global myGui := Gui("-Caption +AlwaysOnTop", "Window Organizer")
 myGui.BackColor := "0x555555"
 
 mainView := Container(Dimension(1, 1, windowWidth-2, windowHeight-2), , "0x211D26")
