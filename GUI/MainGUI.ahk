@@ -7,8 +7,8 @@
 #Include ./Components/Utility/Appearance.ahk
 
 ; Variables
-windowWidth := 1000
-windowHeight := 600
+windowWidth := 600
+windowHeight := 400
 
 titleButtonHeight := 39
 titleButtonWidth := 45

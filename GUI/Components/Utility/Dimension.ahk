@@ -20,11 +20,9 @@ class Dimension {
     }
 
     ToPixels(value, parentDim) {
-        ; MsgBox(Type(value) = "String")
         if Type(value) = "String" {
             value := Trim(value)
             if InStr(value, "%") && RegExMatch(value, "\d+", &match) {
-                MsgBox(Round(Number(match[0]) / 100 * parentDim))
                 return Round(Number(match[0]) / 100 * parentDim)
             } else if RegExMatch(value, "i)^\s*(\d+)\s*px\s*$", &match) {
                 return Number(match[1])
@@ -39,7 +37,6 @@ class Dimension {
 
 
     ToString() {
-        MsgBox(Format("x{} y{} w{} h{}", this.x, this.y, this.w, this.h))
         return Format("x{} y{} w{} h{}", this.x, this.y, this.w, this.h)
     }
 }

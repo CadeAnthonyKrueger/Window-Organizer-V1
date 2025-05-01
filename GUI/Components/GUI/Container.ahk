@@ -9,6 +9,7 @@ class Container {
     __New(parent := myGUI, style := Style()) {
         this.parent := parent
         this.style := style
+        this.children := []
 
         parent.GetClientPos(&x, &y, &w, &h)
         style.ResolveDimension(x, y, w, h)
