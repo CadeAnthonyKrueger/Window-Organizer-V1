@@ -1,19 +1,25 @@
 #Requires AutoHotkey v2.0
-#SingleInstance Force
 #Include ../../MainGUI.ahk
-#Include ../Utility/Dimension.ahk
+#Include ../Utility/Style.ahk
 
+; Alignment Styles:
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
+
 class Container {
-    __New(dim, parentContainer := 0, color := "0xffffff") {
-        this.parentContainer := parentContainer
-        this.dim := dim
-        myGui.GetClientPos(&x, &y, &w, &h)
-        this.parentDimension := parentContainer != 0 ? parentContainer.dim : Dimension(0, 0, w, h)
-        this.x := this.parentDimension.GetX() + dim.GetX()
-        this.y := this.parentDimension.GetY() + dim.GetY()    
-        this.w := dim.GetW()
-        this.h := dim.GetH()
-        this.control := myGui.AddText(Format("x{} y{} w{} h{} Background{}", this.x, this.y, this.w, this.h, color))
+    __New(parent := myGUI, style := Style()) {
+        this.parent := parent
+        this.style := style
+
+        parent.GetClientPos(&x, &y, &w, &h)
+        style.ResolveDimension(x, y, w, h)
+
+        this.control := myGui.AddText(this.style.ToString())
+    }
+
+    GetClientPos(&x, &y, &w, &h) {
+        x := this.style.dimension.x
+        y := this.style.dimension.y
+        w := this.style.dimension.w
+        h := this.style.dimension.h
     }
 }
