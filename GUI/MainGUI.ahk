@@ -12,7 +12,7 @@ windowHeight := 600
 
 titleButtonHeight := 39
 titleButtonWidth := 45
-titleButtonX := titleBarWidth - titleButtonWidth
+titleButtonX := windowWidth - titleButtonWidth
 
 TraySetIcon A_ScriptDir "\Assets\logo.ico"  ; Set tray & GUI icon
 
