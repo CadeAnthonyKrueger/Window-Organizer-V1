@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
+#Include ./Components/Renderer.ahk
 #Include ./Components/GUI/Container.ahk
 #Include ./Components/Utility/Style.ahk
 #Include ./Components/Utility/Dimension.ahk
@@ -20,11 +21,16 @@ TraySetIcon A_ScriptDir "\Assets\logo.ico"  ; Set tray & GUI icon
 global myGui := Gui("-Caption +AlwaysOnTop", "Window Organizer")
 myGui.BackColor := "0x555555"
 
-; mainView := Container( , Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(), Appearance("0x211D26")))
-; titleBar := Container(mainView, Style(Dimension(0, 0, windowWidth-2, titleButtonHeight), Alignment(), Appearance("0x15141B")))
+mainView := Container("mainView", myGui, Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(display := "flex", direction := "column"), Appearance("0x211D26")))
 
-mainView := Container( , Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(), Appearance("0x211D26")))
-titleBar := Container(mainView, Style(Dimension(0, 0, "100%", titleButtonHeight), Alignment(), Appearance("0x15141B")))
+titleBar := mainView.AddChild("titleBar", Style(Dimension(0, 0, "100%", "20%"), Alignment(), Appearance("0x15141B")))
+titleBar2 := mainView.AddChild("titleBar2", Style(Dimension(, , "100%", "20%"), Alignment(), Appearance("0x2600ff")))
+
+block := titleBar2.AddChild("block", Style(Dimension(0, 0, "10%", "100%"), Alignment(), Appearance("0x9dcf29")))
+
+mainView.Initialize()
+
+Renderer.RenderAll()
 
 ; mainView := Container( , AlignmentStyles(1, 1, windowWidth-2, windowHeight-2, , , , , "0x211D26", ))
 ; titleBar := Container(mainView, AlignmentStyles(0, 0, windowWidth-2, titleButtonHeight, , , , , "0x15141B", ))

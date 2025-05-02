@@ -12,11 +12,12 @@ class Dimension {
         this.h := 0
     }
 
-    Resolve(parentX, parentY, parentW, parentH) {
-        this.x := parentX + this.ToPixels(this.relativeX, parentW)
-        this.y := parentY + this.ToPixels(this.relativeY, parentH)
-        this.w := this.ToPixels(this.relativeW, parentW)
-        this.h := this.ToPixels(this.relativeH, parentH)
+    Resolve(parent) {
+        parent.GetClientPos(&x, &y, &w, &h)
+        this.x := x + this.ToPixels(this.relativeX, w)
+        this.y := y + this.ToPixels(this.relativeY, h)
+        this.w := this.ToPixels(this.relativeW, w)
+        this.h := this.ToPixels(this.relativeH, h)
     }
 
     ToPixels(value, parentDim) {
@@ -29,12 +30,11 @@ class Dimension {
             } else if RegExMatch(value, "^\d+$", &match) {
                 return Number(match[0])
             }
-        } else if Type(value) = "Number" {
+        } else if Type(value) = "Integer" {
             return value
         }
-        return value
+        return 0
     }
-
 
     ToString() {
         return Format("x{} y{} w{} h{}", this.x, this.y, this.w, this.h)

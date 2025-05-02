@@ -9,11 +9,4 @@ class Appearance {
     ToString() {
         return Format("Background{} c{}", this.backgroundColor, this.color)
     }
-
-    ; List() {
-    ;     return Map(
-    ;         "Background", this.backgroundColor,
-    ;         "c", this.color
-    ;     )
-    ; }
 }

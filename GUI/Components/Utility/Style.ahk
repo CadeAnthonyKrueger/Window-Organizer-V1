@@ -10,22 +10,23 @@ class Style {
         this.appearance := appearance
     }
 
-    ResolveDimension(parentX, parentY, parentW, parentH) {
-        this.dimension.Resolve(parentX, parentY, parentW, parentH)
+    ResolvePosition(container, parent) {
+        if Type(parent) != "Gui" {
+            switch(parent.style.alignment.display) {
+                case "flex":
+                    if !parent.AreChildrenResolved() {
+                        this.alignment.ResolveChildren(parent)
+                        parent.SetChildrenResolved()
+                    }
+                default:
+                    this.dimension.Resolve(parent)
+            }
+        } else {
+            this.dimension.Resolve(parent)
+        }
     }
 
     ToString() {
         return Format("{} {}", this.dimension.ToString(), this.appearance.ToString())
     }
-
-    ; List() {
-    ;     return Map(
-    ;         "display", this.display,
-    ;         "flexDirection", this.flexDirection,
-    ;         "justifyContent", this.justifyContent,
-    ;         "alignItems", this.alignItems,
-    ;         "Background", this.backgroundColor,
-    ;         "c", this.color
-    ;     )
-    ; }
 }
