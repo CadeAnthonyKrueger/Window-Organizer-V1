@@ -8,20 +8,22 @@ class Alignment {
         this.alignItems := align
     }
 
-    ResolveChildren(parent) {
-        MsgBox(Format("Parent: {}", parent.style.ToString()))
+    ResolveChildren(container) {
+        ; MsgBox(Format("Container: {}", container.ToString()))
         accumulatedOffset := 0
-        for node in parent.children {
-            node.style.dimension.Resolve(parent)
+        for index, node in container.children {
+            node.style.dimension.Resolve(container)
             dim := node.style.dimension
             switch(this.flexDirection) {
-                case "row":
+                case "column":
                     dim.y += accumulatedOffset
                     accumulatedOffset += dim.h
-                case "column":
+                case "row":
                     dim.x += accumulatedOffset
                     accumulatedOffset += dim.w
             }
+            node.SetPositionResolved()
+            ; MsgBox(Format("Child{}: {} Accumulated Offset: {}", index, node.ToString(), accumulatedOffset))
         }
     }
 }

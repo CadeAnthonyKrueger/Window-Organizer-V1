@@ -9,6 +9,7 @@ class Renderer {
     }
 
     static RenderAll() {
+        ; Renderer.queue.ForEach((container) => MsgBox(container.ToString()))
         Renderer.queue.ForEach((container) => container.Render())
         Renderer.queue.Clear()
     }

@@ -12,30 +12,29 @@ class Container {
         this.parent := parent
         this.style := style
         this.children := []
-        this.childrenResolved := false
+        this.positionIsResolved := false
         this.control := unset
     }
 
     Initialize(depth := 1) {
-        this.style.ResolvePosition(this, this.parent)
+        if !this.positionIsResolved {
+            this.style.ResolvePosition(this, this.parent)
+            this.SetPositionResolved()
+        }
         Renderer.Add(this, depth)
         for child in this.children {
             child.Initialize(depth + 1)
         }
     }
 
+    SetPositionResolved() {
+        this.positionIsResolved := true
+    }
+
     AddChild(name, style) {
         child := Container(name, this, style)
         this.children.Push(child)
         return child
-    }
-
-    AreChildrenResolved() {
-        return this.childrenResolved
-    }
-
-    SetChildrenResolved() {
-        this.childrenResolved := true
     }
 
     GetClientPos(&x, &y, &w, &h) {
@@ -47,5 +46,9 @@ class Container {
 
     Render() {
         this.control := myGui.AddText(this.style.ToString())
+    }
+
+    ToString() {
+        return Format("{}: {}", this.name, this.style.ToString())
     }
 }

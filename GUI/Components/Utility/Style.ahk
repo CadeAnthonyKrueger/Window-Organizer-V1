@@ -11,18 +11,12 @@ class Style {
     }
 
     ResolvePosition(container, parent) {
-        if Type(parent) != "Gui" {
-            switch(parent.style.alignment.display) {
-                case "flex":
-                    if !parent.AreChildrenResolved() {
-                        this.alignment.ResolveChildren(parent)
-                        parent.SetChildrenResolved()
-                    }
-                default:
-                    this.dimension.Resolve(parent)
-            }
-        } else {
+        if !container.positionIsResolved {
             this.dimension.Resolve(parent)
+        }
+        switch(this.alignment.display) {
+            case "flex":
+                this.alignment.ResolveChildren(container)
         }
     }
 
