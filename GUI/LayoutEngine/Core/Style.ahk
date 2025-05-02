@@ -10,13 +10,13 @@ class Style {
         this.appearance := appearance
     }
 
-    ResolvePosition(container, parent) {
-        if !container.positionIsResolved {
+    ResolvePosition(component, parent) {
+        if !component.positionIsResolved {
             this.dimension.Resolve(parent)
         }
         switch(this.alignment.display) {
             case "flex":
-                this.alignment.ResolveChildren(container)
+                this.alignment.ResolveChildren(component)
         }
     }
 

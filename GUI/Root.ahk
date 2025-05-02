@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 #Include ./LayoutEngine/Renderer.ahk
-#Include ./Components/Container.ahk
+#Include ./Components/Component.ahk
 #Include ./LayoutEngine/Core/Style.ahk
 #Include ./LayoutEngine/Core/Dimension.ahk
 #Include ./LayoutEngine/Core/Alignment.ahk
@@ -21,7 +21,7 @@ TraySetIcon A_ScriptDir "\Assets\logo.ico"  ; Set tray & GUI icon
 global root := Gui("-Caption +AlwaysOnTop", "Window Organizer")
 root.BackColor := "0x555555"
 
-mainView := Container("mainView", root, Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(display := "flex", direction := "column"), Appearance("0x211D26")))
+mainView := Component("mainView", root, Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(display := "flex", direction := "column"), Appearance("0x211D26")))
 
 titleBar := mainView.AddChild("titleBar", Style(Dimension(0, 0, "100%", "20%"), Alignment(), Appearance("0x15141B")))
 titleBar2 := mainView.AddChild("titleBar2", Style(Dimension(, , "100%", "20%"), Alignment(), Appearance("0x2600ff")))

@@ -6,7 +6,7 @@
 ; Alignment Styles:
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
 
-class Container {
+class Component {
     __New(name, parent := root, style := Style()) {
         this.name := name
         this.parent := parent
@@ -32,7 +32,7 @@ class Container {
     }
 
     AddChild(name, style) {
-        child := Container(name, this, style)
+        child := Component(name, this, style)
         this.children.Push(child)
         return child
     }
