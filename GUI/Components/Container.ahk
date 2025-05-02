@@ -1,13 +1,13 @@
 #Requires AutoHotkey v2.0
-#Include ../../MainGUI.ahk
-#Include ../Renderer.ahk
-#Include ../Utility/Style.ahk
+#Include ../Root.ahk
+#Include ../LayoutEngine/Renderer.ahk
+#Include ../LayoutEngine/Core/Style.ahk
 
 ; Alignment Styles:
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
 
 class Container {
-    __New(name, parent := myGUI, style := Style()) {
+    __New(name, parent := root, style := Style()) {
         this.name := name
         this.parent := parent
         this.style := style
@@ -45,7 +45,7 @@ class Container {
     }
 
     Render() {
-        this.control := myGui.AddText(this.style.ToString())
+        this.control := root.AddText(this.style.ToString())
     }
 
     ToString() {

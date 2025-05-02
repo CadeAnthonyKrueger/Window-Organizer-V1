@@ -1,5 +1,5 @@
 #Requires AutoHotkey v2.0
-#Include ./Utility/DepthList.ahk
+#Include ./Utils/DepthList.ahk
 
 class Renderer {
     static queue := DepthList()

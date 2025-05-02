@@ -1,11 +1,11 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
-#Include ./Components/Renderer.ahk
-#Include ./Components/GUI/Container.ahk
-#Include ./Components/Utility/Style.ahk
-#Include ./Components/Utility/Dimension.ahk
-#Include ./Components/Utility/Alignment.ahk
-#Include ./Components/Utility/Appearance.ahk
+#Include ./LayoutEngine/Renderer.ahk
+#Include ./Components/Container.ahk
+#Include ./LayoutEngine/Core/Style.ahk
+#Include ./LayoutEngine/Core/Dimension.ahk
+#Include ./LayoutEngine/Core/Alignment.ahk
+#Include ./LayoutEngine/Core/Appearance.ahk
 
 ; Variables
 windowWidth := 600
@@ -18,10 +18,10 @@ titleButtonX := windowWidth - titleButtonWidth
 TraySetIcon A_ScriptDir "\Assets\logo.ico"  ; Set tray & GUI icon
 
 ; Create GUI without standard window border (to allow custom title bar)
-global myGui := Gui("-Caption +AlwaysOnTop", "Window Organizer")
-myGui.BackColor := "0x555555"
+global root := Gui("-Caption +AlwaysOnTop", "Window Organizer")
+root.BackColor := "0x555555"
 
-mainView := Container("mainView", myGui, Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(display := "flex", direction := "column"), Appearance("0x211D26")))
+mainView := Container("mainView", root, Style(Dimension(1, 1, windowWidth-2, windowHeight-2), Alignment(display := "flex", direction := "column"), Appearance("0x211D26")))
 
 titleBar := mainView.AddChild("titleBar", Style(Dimension(0, 0, "100%", "20%"), Alignment(), Appearance("0x15141B")))
 titleBar2 := mainView.AddChild("titleBar2", Style(Dimension(, , "100%", "20%"), Alignment(), Appearance("0x2600ff")))
@@ -53,5 +53,5 @@ Renderer.RenderAll()
 ; minButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX - titleButtonWidth * 2, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\minus1_trans.png")
 ; minButton.OnEvent("Click", (*) => myGui.Minimize())
 
-myGui.Show(Format("w{} h{}", windowWidth, windowHeight))
+root.Show(Format("w{} h{}", windowWidth, windowHeight))
 
