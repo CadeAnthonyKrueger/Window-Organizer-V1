@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
-#Include ../Root.ahk
-#Include ../LayoutEngine/Renderer.ahk
-#Include ../LayoutEngine/Core/Style.ahk
+#Include ../../Root.ahk
+#Include ../Renderer.ahk
+#Include ./Style.ahk
 
 ; Alignment Styles:
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
