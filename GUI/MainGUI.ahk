@@ -36,15 +36,15 @@ titleBar := Container(mainView, Style(Dimension(0, 0, "100%", titleButtonHeight)
 
 ; Title bar buttons
 ; xButtonContainer := myGui.AddText(Format("x{} y0 w{} h{} BackgroundTrans", titleButtonX, titleButtonWidth, titleButtonHeight))
-; xButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\close1.png")
+; xButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\close1_trans.png")
 ; xButton.OnEvent("Click", (*) => myGui.Destroy())
 
 ; expandButtonContainer := myGui.AddText(Format("x{} y0 w{} h{} BackgroundTrans", titleButtonX - titleButtonWidth, titleButtonWidth, titleButtonWidth))
-; expandButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX - titleButtonWidth, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\square1.png")
+; expandButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX - titleButtonWidth, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\square1_trans.png")
 ; expandButton.OnEvent("Click", (*) => myGui.Maximize())
 
 ; minButtonContainer := myGui.AddText(Format("x{} y0 w{} h{} BackgroundTrans", titleButtonX - titleButtonWidth * 2, titleButtonWidth, titleButtonWidth))
-; minButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX - titleButtonWidth * 2, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\minus1.png")
+; minButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX - titleButtonWidth * 2, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\minus1_trans.png")
 ; minButton.OnEvent("Click", (*) => myGui.Minimize())
 
 myGui.Show(Format("w{} h{}", windowWidth, windowHeight))
