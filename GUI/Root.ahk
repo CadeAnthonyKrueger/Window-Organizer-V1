@@ -1,29 +1,23 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 #Include ./LayoutEngine/Renderer.ahk
+#Include ./LayoutEngine/Core/Window.ahk
 #Include ./LayoutEngine/Core/Style.ahk
 #Include ./LayoutEngine/Core/Dimension.ahk
 #Include ./LayoutEngine/Core/Alignment.ahk
 #Include ./LayoutEngine/Core/Appearance.ahk
 #Include ./Components/MainView.ahk
+#Include ./Utils/Path.ahk
 
-; Variables
-windowWidth := 600
-windowHeight := 400
+global root := Window("Root", Path.Resolve(A_LineFile, "Root.ini"))
 
-titleButtonHeight := 39
-titleButtonWidth := 45
-titleButtonX := windowWidth - titleButtonWidth
+    MainView(root).Render()
 
-TraySetIcon A_ScriptDir "\Assets\logo.ico"  ; Set tray & GUI icon
-
-; Create GUI without standard window border (to allow custom title bar)
-global root := Gui("-Caption +AlwaysOnTop", "Window Organizer")
-root.BackColor := "0x555555"
-
-MainView().Render()
+root.Initialize()
 
 Renderer.RenderAll()
+
+root.Show()
 
 ; mainView := Container( , AlignmentStyles(1, 1, windowWidth-2, windowHeight-2, , , , , "0x211D26", ))
 ; titleBar := Container(mainView, AlignmentStyles(0, 0, windowWidth-2, titleButtonHeight, , , , , "0x15141B", ))
@@ -46,5 +40,5 @@ Renderer.RenderAll()
 ; minButton := myGui.AddPicture(Format("x{} y0 w{} h{}", titleButtonX - titleButtonWidth * 2, titleButtonWidth, titleButtonHeight), A_ScriptDir "\Assets\minus1_trans.png")
 ; minButton.OnEvent("Click", (*) => myGui.Minimize())
 
-root.Show(Format("w{} h{}", windowWidth, windowHeight))
+; root.Show(Format("w{} h{}", windowWidth, windowHeight))
 

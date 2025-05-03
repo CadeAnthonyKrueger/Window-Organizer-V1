@@ -25,7 +25,7 @@ class Alignment extends StyleAspect {
                     accumulatedOffset += dim.w
             }
             node.SetPositionResolved()
-            ; MsgBox(Format("Child{}: {} Accumulated Offset: {}", index, node.ToString(), accumulatedOffset))
+            ; MsgBox(Format("Child{}: {} `nAccumulated Offset: {}", index, node.ToString(), accumulatedOffset))
         }
     }
 

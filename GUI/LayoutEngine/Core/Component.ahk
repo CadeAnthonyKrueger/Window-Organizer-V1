@@ -8,7 +8,7 @@
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
 
 class Component {
-    __New(name, styleSheet := 0, parent := root) {
+    __New(name, styleSheet := 0, parent := 0) {
         this.name := name
         this.parent := parent
         this.style := StyleBuilder.Build(name, styleSheet)
@@ -17,15 +17,16 @@ class Component {
         this.control := unset
     }
 
-    Initialize(depth := 1) {
-        if !this.positionIsResolved {
-            this.style.ResolvePosition(this, this.parent)
-            this.SetPositionResolved()
+    Initialize(depth := 0) {
+        this.style.ResolvePosition(this, this.parent)
+        this.SetPositionResolved()
+        if this.parent != 0 {
+            Renderer.Add(this, depth)
         }
-        Renderer.Add(this, depth)
         for child in this.children {
             child.Initialize(depth + 1)
         }
+        return this
     }
 
     SetPositionResolved() {
@@ -46,7 +47,7 @@ class Component {
     }
 
     Render() {
-        this.control := root.AddText(this.style.ToString())
+        this.control := root.GetWindow().AddText(this.style.ToString())
     }
 
     ToString() {

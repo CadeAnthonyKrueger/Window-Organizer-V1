@@ -15,7 +15,11 @@ class Dimension extends StyleAspect {
     }
 
     Resolve(parent) {
-        parent.GetClientPos(&x, &y, &w, &h)
+        x := 0, y := 0, w := 0, h := 0
+        if parent != 0 {
+            parent.GetClientPos(&x, &y, &w, &h)
+        }
+        ; MsgBox(Format("Width: {} Height: {}", w, h))
         this.x := x + PixelCalc.ToPixels(this.relativeX, w)
         this.y := y + PixelCalc.ToPixels(this.relativeY, h)
         this.w := PixelCalc.ToPixels(this.relativeW, w)
@@ -27,18 +31,10 @@ class Dimension extends StyleAspect {
     }
 
     static CallConstructor(map) {
-        ; Dimension.PrintMap(map)
         return Dimension(map["x"], map["y"], map["w"], map["h"])
     }
 
     ToString() {
         return Format("x{} y{} w{} h{}", this.x, this.y, this.w, this.h)
-    }
-
-    static PrintMap(map) {
-        str := ""
-        for key, value in map
-            str .= key ": " value "`n"
-        MsgBox str
     }
 }

@@ -2,6 +2,7 @@
 
 class PixelCalc {
     static ToPixels(value, parentDim) {
+
         static ops := Map("+" ,1, "-" ,1, "*" ,2, "/" ,2)
 
         if Type(value) = "String" {

@@ -8,7 +8,6 @@ class StyleBuilder {
 
     static Build(name, styleSheet) {
         styleMap := StyleBuilder.IniToObject(name, styleSheet)
-        StyleBuilder.PrintMap(styleMap)
         for key, value in styleMap {
             StyleBuilder.styleMapper.Add(key, value)
         }
@@ -20,7 +19,7 @@ class StyleBuilder {
         inSection := false
         Loop Read, styleSheet {
             line := Trim(A_LoopReadLine)
-            if line = "" || SubStr(line, 1, 1) = ";"  ; skip empty or comment lines
+            if line = "" || SubStr(line, 1, 1) = ";"
                 continue
             if RegExMatch(line, "^\[(.+)\]$", &match) {
                 inSection := (match[1] = name)
@@ -31,16 +30,9 @@ class StyleBuilder {
                 value := Trim(kv[2])
                 result[key] := value
             } else if inSection && RegExMatch(line, "^\[.+\]$") {
-                break  ; stop if next section starts
+                break
             }
         }
         return result
-    }
-
-    static PrintMap(map) {
-        str := ""
-        for key, value in map
-            str .= key ": " value "`n"
-        MsgBox str
     }
 }
