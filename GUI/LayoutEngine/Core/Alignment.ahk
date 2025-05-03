@@ -1,9 +1,11 @@
 #Requires AutoHotkey v2.0
 
-class Alignment {
-    __New(display := "none", direction := "row", justify := "start", align := "start") {
+#Include ./StyleAspect.ahk
+
+class Alignment extends StyleAspect {
+    __New(display := "none", flexDirection := "row", justify := "start", align := "start") {
         this.display := display
-        this.flexDirection := direction
+        this.flexDirection := flexDirection
         this.justifyContent := justify
         this.alignItems := align
     }
@@ -25,5 +27,18 @@ class Alignment {
             node.SetPositionResolved()
             ; MsgBox(Format("Child{}: {} Accumulated Offset: {}", index, node.ToString(), accumulatedOffset))
         }
+    }
+
+    static Defaults() {
+        return Map(
+            "display", "none",
+            "flexDirection", "row",
+            "justify", "start",
+            "align", "start"
+        )
+    }
+
+    static CallConstructor(map) {
+        return Alignment(map["display"], map["flexDirection"], map["justify"], map["align"])
     }
 }

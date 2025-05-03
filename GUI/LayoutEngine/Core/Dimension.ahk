@@ -1,6 +1,8 @@
 #Requires AutoHotkey v2.0
+#Include ../Utils/PixelCalc.ahk
+#Include ./StyleAspect.ahk
 
-class Dimension {
+class Dimension extends StyleAspect {
     __New(x := 0, y := 0, w := 0, h := 0) {
         this.relativeX := x
         this.relativeY := y
@@ -14,29 +16,29 @@ class Dimension {
 
     Resolve(parent) {
         parent.GetClientPos(&x, &y, &w, &h)
-        this.x := x + this.ToPixels(this.relativeX, w)
-        this.y := y + this.ToPixels(this.relativeY, h)
-        this.w := this.ToPixels(this.relativeW, w)
-        this.h := this.ToPixels(this.relativeH, h)
+        this.x := x + PixelCalc.ToPixels(this.relativeX, w)
+        this.y := y + PixelCalc.ToPixels(this.relativeY, h)
+        this.w := PixelCalc.ToPixels(this.relativeW, w)
+        this.h := PixelCalc.ToPixels(this.relativeH, h)
     }
 
-    ToPixels(value, parentDim) {
-        if Type(value) = "String" {
-            value := Trim(value)
-            if InStr(value, "%") && RegExMatch(value, "\d+", &match) {
-                return Round(Number(match[0]) / 100 * parentDim)
-            } else if RegExMatch(value, "i)^\s*(\d+)\s*px\s*$", &match) {
-                return Number(match[1])
-            } else if RegExMatch(value, "^\d+$", &match) {
-                return Number(match[0])
-            }
-        } else if Type(value) = "Integer" {
-            return value
-        }
-        return 0
+    static Defaults() {
+        return Map("x", 0, "y", 0, "w", 0, "h", 0)
+    }
+
+    static CallConstructor(map) {
+        ; Dimension.PrintMap(map)
+        return Dimension(map["x"], map["y"], map["w"], map["h"])
     }
 
     ToString() {
         return Format("x{} y{} w{} h{}", this.x, this.y, this.w, this.h)
+    }
+
+    static PrintMap(map) {
+        str := ""
+        for key, value in map
+            str .= key ": " value "`n"
+        MsgBox str
     }
 }

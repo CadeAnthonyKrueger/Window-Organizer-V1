@@ -2,15 +2,16 @@
 #Include ../../Root.ahk
 #Include ../Renderer.ahk
 #Include ./Style.ahk
+#Include ../Utils/StyleBuilder.ahk
 
 ; Alignment Styles:
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
 
 class Component {
-    __New(name, parent := root, style := Style()) {
+    __New(name, styleSheet := 0, parent := root) {
         this.name := name
         this.parent := parent
-        this.style := style
+        this.style := StyleBuilder.Build(name, styleSheet)
         this.children := []
         this.positionIsResolved := false
         this.control := unset
@@ -31,8 +32,8 @@ class Component {
         this.positionIsResolved := true
     }
 
-    AddChild(name, style) {
-        child := Component(name, this, style)
+    AddChild(name, styleSheet) {
+        child := Component(name, styleSheet, this)
         this.children.Push(child)
         return child
     }

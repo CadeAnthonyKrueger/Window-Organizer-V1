@@ -2,19 +2,19 @@
 
 class DepthList {
     __New() {
-        this.depthList := []  ; Initialize depthList as an array of arrays.
+        this.depthList := []
     }
 
     Push(element, depth) {
-        if depth > this.depthList.Length {  ; Check if the depth array exists.
-            this.depthList.Push([])  ; Initialize it if it doesn't exist.
+        if depth > this.depthList.Length {
+            this.depthList.Push([])
         }
-        this.depthList[depth].Push(element)  ; Add the element to the appropriate depth.
+        this.depthList[depth].Push(element)
     }
 
     ForEach(func) {
-        for depth, elements in this.depthList {  ; Iterate over each depth array.
-            for element in elements {  ; Iterate over elements in the array at the current depth.
+        for depth, elements in this.depthList {
+            for element in elements {
                 func(element)
             }
         }
