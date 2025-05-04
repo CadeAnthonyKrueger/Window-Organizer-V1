@@ -46,6 +46,14 @@ class Component {
         h := this.style.dimension.h
     }
 
+    GetDimensions() {
+        return this.style.dimension
+    }
+
+    ResolveDimensions() {
+        return this.style.dimension.Resolve(this)
+    }
+
     Render() {
         this.control := root.GetWindow().AddText(this.style.ToString())
     }
