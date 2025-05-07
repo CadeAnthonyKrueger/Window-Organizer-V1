@@ -9,15 +9,13 @@ class MainView {
     __New(parent) {
         this.parent := parent
         this.styleSheet := Path.Resolve(A_LineFile, "Styles/MainView.ini")
-        ; titleButtonHeight := 39
-        ; titleButtonWidth := 45
-        ; titleButtonX := windowWidth - titleButtonWidth
     }
 
     Render() {
         mainView := this.parent.AddChild("MainView", this.styleSheet)
 
             titleBar := mainView.AddChild("TitleBar", this.styleSheet)
+
                 minimizeButton := titleBar.AddChild("MinimizeButton", this.styleSheet)
                 expandButton := titleBar.AddChild("ExpandButton", this.styleSheet)
                 closeButton := titleBar.AddChild("CloseButton", this.styleSheet)

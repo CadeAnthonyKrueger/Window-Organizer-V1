@@ -6,12 +6,13 @@
 #Include ./LayoutEngine/Core/Dimension.ahk
 #Include ./LayoutEngine/Core/Alignment.ahk
 #Include ./LayoutEngine/Core/Appearance.ahk
+#Include ./LayoutEngine/Core/MouseTracker.ahk
 #Include ./Components/MainView.ahk
 #Include ./Utils/Path.ahk
 
 global root := Window("Root", Path.Resolve(A_LineFile, "Root.ini"))
 
-    MainView(root).Render()
+MainView(root).Render()
 
 root.Initialize()
 
