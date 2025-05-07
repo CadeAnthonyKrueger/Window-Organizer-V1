@@ -51,7 +51,7 @@ class Component {
     }
 
     ResolveDimensions() {
-        return this.style.dimension.Resolve(this)
+        return this.style.dimension.Resolve(this.parent)
     }
 
     Render() {

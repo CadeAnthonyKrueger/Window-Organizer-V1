@@ -26,6 +26,7 @@ class FlexLayout {
             dim.AddToValue(this.mainAxis["axis"], accumulatedChildSize)
             accumulatedChildSize += dim.Get(this.mainAxis["dim"])
             this.AlignComponent(dim)
+            node.SetPositionResolved()
         }
         if (this.justifyContent = "start") {
             return

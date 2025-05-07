@@ -12,8 +12,6 @@ class Dimension extends StyleAspect {
         this.y := 0
         this.w := 0
         this.h := 0
-
-        this.dimMap := Map("x", this.x, "y", this.y, "w", this.w, "h", this.h)
     }
 
     Resolve(parent) {
@@ -34,11 +32,9 @@ class Dimension extends StyleAspect {
 
     Set(key, num) {
         this.%key% := num
-        this.dimMap[key] := num
     }
 
     AddToValue(key, num) {
-        MsgBox(Format("Setting {} `n- Previous Value: {} `n- Current Value: {}", key, this.Get(key), this.Get(key) + num))
         this.Set(key, this.Get(key) + num)
     }
 
