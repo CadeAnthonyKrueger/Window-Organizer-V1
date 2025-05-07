@@ -25,7 +25,7 @@ class FlexLayout {
             dim := node.ResolveDimensions()
             dim.AddToValue(this.mainAxis["axis"], accumulatedChildSize)
             accumulatedChildSize += dim.Get(this.mainAxis["dim"])
-            this.AlignComponent(dim)
+            this.AlignComponent(dim, container.GetDimensions())
             node.SetPositionResolved()
         }
         if (this.justifyContent = "start") {
@@ -64,12 +64,12 @@ class FlexLayout {
         }
     }
 
-    AlignComponent(dim) {
+    AlignComponent(dim, parentDim) {
         switch(this.alignItems) {
             case "center":
-                dim.AddToValue(this.altAxis["axis"], (dim[this.altAxis["dim"]] - dim[this.altAxis["axis"]]) / 2)
+                dim.AddToValue(this.altAxis["axis"], (parentDim.Get(this.altAxis["dim"]) - dim.Get(this.altAxis["dim"])) / 2)
             case "end":
-                dim.AddToValue(this.altAxis["axis"], dim[this.altAxis["dim"]] - dim[this.altAxis["axis"]])
+                dim.AddToValue(this.altAxis["axis"], parentDim.Get(this.altAxis["dim"]) - dim.Get(this.altAxis["dim"]))
         }
     }
 }

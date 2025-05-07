@@ -16,8 +16,8 @@ class Alignment extends StyleAspect {
         switch(this.display) {
             case "flex":
                 this.layout := FlexLayout(this.flexDirection, this.justifyContent, this.alignItems)
+                this.layout.ResolveChildren(container)
         }
-        this.layout.ResolveChildren(container)
     }
 
     static Defaults() {
