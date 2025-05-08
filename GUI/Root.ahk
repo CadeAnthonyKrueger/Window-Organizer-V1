@@ -16,7 +16,6 @@ global root := Window("Root", Path.Resolve(A_LineFile, "Root.ini"))
 MainView(root).Render()
 
 root.Initialize()
-Cursor.Initialize()
 
 Renderer.RenderAll()
 

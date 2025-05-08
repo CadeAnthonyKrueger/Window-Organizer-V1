@@ -12,6 +12,7 @@ class Window extends Component {
         this.windowX := 0
         this.windowY := 0
         this.window := Gui("-Caption +AlwaysOnTop", "Window Organizer")
+        Cursor.Initialize()
     }
 
     Show() {
