@@ -20,6 +20,7 @@ class MainView {
                 expandButton := titleBar.AddChild("ExpandButton", this.styleSheet)
                 closeButton := titleBar.AddChild("CloseButton", this.styleSheet) ; , { backgroundColor: "0xffffff" })
                 ; closeButton.ApplyStyle({ backgroundColor: "0xFFA500" })
-                ; closeButton.On("mouseEnter", (component) => MsgBox("In close button"))
+                closeButton.On("mouseEnter", (component) => component.ApplyStyle({ backgroundColor: "0xFFA500" }))
+                closeButton.On("mouseExit", (component) => component.ApplyStyle({ backgroundColor: "0xFF0000" }))
     }
 }

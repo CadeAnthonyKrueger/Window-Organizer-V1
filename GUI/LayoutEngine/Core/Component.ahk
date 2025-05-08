@@ -58,6 +58,7 @@ class Component {
 
     ApplyStyle(style) {
         this.style.Merge(style)
+        this.Render()
     }
 
     On(event, callback) {
