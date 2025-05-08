@@ -65,11 +65,13 @@ class FlexLayout {
     }
 
     AlignComponent(dim, parentDim) {
+        axisKey := this.altAxis["axis"]
+        dimKey := this.altAxis["dim"]
         switch(this.alignItems) {
             case "center":
-                dim.AddToValue(this.altAxis["axis"], (parentDim.Get(this.altAxis["dim"]) - dim.Get(this.altAxis["dim"])) / 2)
+                dim.AddToValue(axisKey, (parentDim.Get(dimKey) - dim.Get(dimKey)) / 2)
             case "end":
-                dim.AddToValue(this.altAxis["axis"], parentDim.Get(this.altAxis["dim"]) - dim.Get(this.altAxis["dim"]))
+                dim.AddToValue(axisKey, parentDim.Get(dimKey) - dim.Get(dimKey))
         }
     }
 }
