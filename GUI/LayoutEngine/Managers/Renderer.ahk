@@ -9,9 +9,6 @@ class Renderer {
     }
 
     static RenderAll() {
-        ; MsgBox("Rendering...")
-        ; Renderer.queue.ForEach((container) => MsgBox(container.ToString()))
-        ; MsgBox("Done Rendering.")
         Renderer.queue.ForEach((container) => container.Render())
         Renderer.queue.Clear()
     }

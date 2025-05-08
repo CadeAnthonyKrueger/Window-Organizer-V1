@@ -13,7 +13,7 @@ class MainView {
     }
 
     HandleMouseEnter(el, backgroundColor) {
-        Cursor.Set("Hand")
+        Cursor.Set("Help")
         el.ApplyStyle({ backgroundColor: backgroundColor })
     }
 
