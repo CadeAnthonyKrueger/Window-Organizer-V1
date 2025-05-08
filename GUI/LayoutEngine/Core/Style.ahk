@@ -2,6 +2,7 @@
 #Include ./Dimension.ahk
 #Include ./Alignment.ahk
 #Include ./Appearance.ahk
+#Include ../Utils/StyleMapper.ahk
 
 class Style {
     __New(dimension := Dimension(), alignment := Alignment(), appearance := Appearance()) {
@@ -17,6 +18,12 @@ class Style {
         switch(this.alignment.display) {
             case "flex":
                 this.alignment.ResolveChildren(component)
+        }
+    }
+
+    Merge(partialStyle) {
+        for key, value in ObjOwnProps(partialStyle) {
+            this.%StrLower(StyleMapper.GetClassName(key))%.SetProperty(key, value)
         }
     }
 

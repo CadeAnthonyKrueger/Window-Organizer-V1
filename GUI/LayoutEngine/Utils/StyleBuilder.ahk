@@ -6,9 +6,14 @@ class StyleBuilder {
 
     static styleMapper := StyleMapper()
 
-    static Build(name, styleSheet) {
+    static Build(name, styleSheet, inlineStyle) {
         styleMap := StyleBuilder.IniToObject(name, styleSheet)
+        ; StyleBuilder.PrintMap(styleMap)
+        ; StyleBuilder.PrintMap({ backgroundColor: "0xffffff", display: "none"})
         for key, value in styleMap {
+            StyleBuilder.styleMapper.Add(key, value)
+        }
+        for key, value in ObjOwnProps(inlineStyle) {
             StyleBuilder.styleMapper.Add(key, value)
         }
         return StyleBuilder.styleMapper.GetStyleObject()
@@ -34,5 +39,16 @@ class StyleBuilder {
             }
         }
         return result
+    }
+
+    static PrintMap(map) {
+        output := ""
+        if Type(map) != "Map" {
+            map := ObjOwnProps(map)
+        }
+        for key, value in map {
+            output .= key " => " value "`n"
+        }
+        MsgBox output
     }
 }

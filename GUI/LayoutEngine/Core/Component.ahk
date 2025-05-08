@@ -35,8 +35,8 @@ class Component {
         this.positionIsResolved := true
     }
 
-    AddChild(name, styleSheet) {
-        child := Component(name, styleSheet, this)
+    AddChild(name, styleSheet, inlineStyle := {}) {
+        child := Component(name, styleSheet, inlineStyle, this)
         this.children.Push(child)
         return child
     }
@@ -54,6 +54,10 @@ class Component {
 
     ResolveDimensions() {
         return this.style.dimension.Resolve(this.parent)
+    }
+
+    ApplyStyle(style) {
+        this.style.Merge(style)
     }
 
     On(event, callback) {

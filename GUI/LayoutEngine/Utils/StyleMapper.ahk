@@ -11,7 +11,6 @@ class StyleMapper {
         "Appearance", Map("styles", ["backgroundColor", "color"], "classRef", Appearance)
     )
 
-
     __New() {
         this.styleMap := Map(
             "Dimension", Map(),
@@ -21,18 +20,19 @@ class StyleMapper {
     }
 
     Add(key, value) {
+        className := StyleMapper.GetClassName(key)
+        if (className != "") {
+            this.styleMap[className][key] := value
+        }
+    }
+
+    static GetClassName(key) {
         for className, aspects in StyleMapper.styleAspects {
-            keyInAspects := false
-            for style in aspects["styles"] {
-                if style = key {
-                    keyInAspects := true
-                    break
-                }
-            }
-            if keyInAspects {
-                this.styleMap[className][key] := value
+            if (key in aspects["styles"]) {
+                return className
             }
         }
+        return ""
     }
 
     GetStyleObject() {

@@ -11,7 +11,8 @@ class EventDispatcher {
     }
 
     static HandleMouseMove(x, y) {
-        for hoverable in EventDispatcher.hoverables
+        for hoverable in EventDispatcher.hoverables {
             hoverable.HandleMouseMove(x, y)
+        }
     }
 }

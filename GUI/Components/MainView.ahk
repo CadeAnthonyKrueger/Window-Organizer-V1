@@ -19,6 +19,6 @@ class MainView {
                 minimizeButton := titleBar.AddChild("MinimizeButton", this.styleSheet)
                 expandButton := titleBar.AddChild("ExpandButton", this.styleSheet)
                 closeButton := titleBar.AddChild("CloseButton", this.styleSheet)
-                    closeButton.On("mouseEnter", (component) => MsgBox("In close button"))
+                    ;closeButton.On("mouseEnter", (component) => MsgBox("In close button"))
     }
 }

@@ -4,8 +4,8 @@
 #Include ./MouseTracker.ahk
 
 class Window extends Component {
-    __New(name, styleSheet) {
-        super.__New(name, styleSheet, 0)
+    __New(name, styleSheet, inlineStyle := {}) {
+        super.__New(name, styleSheet, inlineStyle, 0)
         TraySetIcon A_ScriptDir "\Assets\logo.ico"
         CoordMode("Mouse", "Screen")
         this.windowX := 0

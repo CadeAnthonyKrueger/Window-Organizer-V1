@@ -12,6 +12,13 @@ class Dimension extends StyleAspect {
         this.y := 0
         this.w := 0
         this.h := 0
+
+        this.properties := Map(
+            "relativeX", this.relativeX,
+            "relativeY", this.relativeY,
+            "relativeW", this.relativeW,
+            "relativeH", this.relativeH
+        )
     }
 
     Resolve(parent) {

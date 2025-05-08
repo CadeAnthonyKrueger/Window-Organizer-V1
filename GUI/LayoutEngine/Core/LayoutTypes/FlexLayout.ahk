@@ -4,22 +4,22 @@ class FlexLayout {
 
     static styleOptions := Map(
         "flexDirection", ["row", "column"],
-        "justifyContent", ["start", "center", "end", "space-between", "space-evenly", "space-around"],
-        "alignItems", ["start", "center", "end"]
+        "justify", ["start", "center", "end", "space-between", "space-evenly", "space-around"],
+        "align", ["start", "center", "end"]
     )
 
-    __New(flexDirection, justifyContent, alignItems) {
+    __New(flexDirection, justify, align) {
         this.flexDirection := flexDirection
-        this.justifyContent := justifyContent
-        this.alignItems := alignItems
+        this.justify := justify
+        this.align := align
 
         this.mainAxis := (flexDirection = "row") ? Map("axis", "x", "dim", "w" ) : Map("axis", "y", "dim", "h" )
         this.altAxis := (flexDirection = "column") ? Map("axis", "x", "dim", "w" ) : Map("axis", "y", "dim", "h" )
     }
 
     ResolveChildren(container) {
-        ; First pass resolves children relative to their container and siblings along the main axis (justifyContent == "start").
-        ; Also resolves children relative to just their container on the alt axis (alignItems).
+        ; First pass resolves children relative to their container and siblings along the main axis (justify == "start").
+        ; Also resolves children relative to just their container on the alt axis (align).
         accumulatedChildSize := 0
         for index, node in container.children {
             dim := node.ResolveDimensions()
@@ -28,7 +28,7 @@ class FlexLayout {
             this.AlignComponent(dim, container.GetDimensions())
             node.SetPositionResolved()
         }
-        if (this.justifyContent = "start") {
+        if (this.justify = "start") {
             return
         }
         ; Second pass resolves children based on the justification of the parent
@@ -41,7 +41,7 @@ class FlexLayout {
     }
 
     JustifyComponent(index, dim, spaceAvailable, numChildren) {
-        switch(this.justifyContent) {
+        switch(this.justify) {
             case "center":
                 dim.AddToValue(this.mainAxis["axis"], spaceAvailable / 2)
             case "end":
@@ -67,7 +67,7 @@ class FlexLayout {
     AlignComponent(dim, parentDim) {
         axisKey := this.altAxis["axis"]
         dimKey := this.altAxis["dim"]
-        switch(this.alignItems) {
+        switch(this.align) {
             case "center":
                 dim.AddToValue(axisKey, (parentDim.Get(dimKey) - dim.Get(dimKey)) / 2)
             case "end":

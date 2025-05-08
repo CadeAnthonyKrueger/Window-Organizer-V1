@@ -1,6 +1,10 @@
 #Requires AutoHotkey v2.0 
 
 class StyleAspect {
+    SetProperty(key, value) {
+        this.%key% := value
+    }
+
     static FromMap(props) {
         defaults := this.Defaults()
         for k, v in props
