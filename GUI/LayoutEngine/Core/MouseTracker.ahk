@@ -1,10 +1,13 @@
 #Requires AutoHotkey v2.0
 
+#Include ./EventDispatcher.ahk
+
 class MouseTracker {
     __New(window) {
         this.window := window
-        this.trackedElements := []
         this.textCtrl := ""
+        this.windowMouseX := 0
+        this.windowMouseY := 0
         SetTimer(this.Track.Bind(this), 30)
     }
 
@@ -12,16 +15,16 @@ class MouseTracker {
         this.textCtrl := this.window.GetWindow().AddText("x10 y10 w200", "")
     }
 
-    Add(element) {
-        this.trackedElements.Push(element)
-    }
-
     Track() {
         MouseGetPos(&x, &y)
         this.window.GetWindowCoords(&windowX, &windowY)
-        this.textCtrl.Value := "Mouse in GUI: x=" x - windowX ", y=" y - windowY
-        ; if relativeX > 100 and relativeX < 200 and relativeY > 100 and relativeY < 200 {
-        ;     MsgBox("In Bounds")
-        ; }
+        previousX := this.windowMouseX
+        previousY := this.windowMouseY
+        this.windowMouseX := x - windowX
+        this.windowMouseY := y - windowY
+        if previousX != this.windowMouseX or previousY != this.windowMouseY {
+            this.textCtrl.Value := "Mouse in GUI: x=" this.windowMouseX ", y=" this.windowMouseY
+            EventDispatcher.HandleMouseMove(this.windowMouseX, this.windowMouseY)
+        }
     }
 }

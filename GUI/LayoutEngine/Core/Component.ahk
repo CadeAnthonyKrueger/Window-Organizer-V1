@@ -2,6 +2,7 @@
 #Include ../../Root.ahk
 #Include ../Renderer.ahk
 #Include ./Style.ahk
+#Include ./EventDispatcher.ahk
 #Include ../Utils/StyleBuilder.ahk
 
 ; Alignment Styles:
@@ -15,6 +16,7 @@ class Component {
         this.children := []
         this.positionIsResolved := false
         this.control := unset
+        this.eventHandlers := Map()
     }
 
     Initialize(depth := 0) {
@@ -52,6 +54,19 @@ class Component {
 
     ResolveDimensions() {
         return this.style.dimension.Resolve(this.parent)
+    }
+
+    On(event, callback) {
+        this.eventHandlers[event] := callback
+        EventDispatcher.Register(this, event)
+    }
+
+    FireEvent(event) {
+        if this.eventHandlers.Has(event) {
+            handler := this.eventHandlers[event]
+            if IsSet(handler)
+                handler.Call(this)
+        }
     }
 
     Render() {
