@@ -11,21 +11,6 @@ class StyleMapper {
         "Appearance", Map("styles", ["backgroundColor", "color"], "classRef", Appearance)
     )
 
-    __New() {
-        this.styleMap := Map(
-            "Dimension", Map(),
-            "Alignment", Map(),
-            "Appearance", Map()
-        )
-    }
-
-    Add(key, value) {
-        className := StyleMapper.GetClassName(key)
-        if (className != "") {
-            this.styleMap[className][key] := value
-        }
-    }
-
     static GetClassName(key) {
         for className, aspects in StyleMapper.styleAspects {
             keyInAspects := false
@@ -40,6 +25,21 @@ class StyleMapper {
             }
         }
         return ""
+    }
+
+    __New() {
+        this.styleMap := Map(
+            "Dimension", Map(),
+            "Alignment", Map(),
+            "Appearance", Map()
+        )
+    }
+
+    Add(key, value) {
+        className := StyleMapper.GetClassName(key)
+        if (className != "") {
+            this.styleMap[className][key] := value
+        }
     }
 
     GetStyleObject() {
