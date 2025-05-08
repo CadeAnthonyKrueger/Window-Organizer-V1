@@ -1,7 +1,8 @@
-#Requires AutoHotkey v2.0 
+#Requires AutoHotkey v2.0
 
 #Include ./Component.ahk
 #Include ./MouseTracker.ahk
+#Include ./Cursor.ahk
 
 class Window extends Component {
     __New(name, styleSheet, inlineStyle := {}) {

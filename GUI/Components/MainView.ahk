@@ -3,12 +3,23 @@
 #Include ../LayoutEngine/Renderer.ahk
 #Include ../LayoutEngine/Core/Component.ahk
 #Include ../LayoutEngine/Core/Style.ahk
+#Include ../LayoutEngine/Core/Cursor.ahk
 #Include ../Utils/Path.ahk
 
 class MainView {
     __New(parent) {
         this.parent := parent
         this.styleSheet := Path.Resolve(A_LineFile, "Styles/MainView.ini")
+    }
+
+    HandleMouseEnter(el, backgroundColor) {
+        Cursor.Set("Hand")
+        el.ApplyStyle({ backgroundColor: backgroundColor })
+    }
+
+    HandleMouseExit(el, backgroundColor) {
+        Cursor.Set("Arrow")
+        el.ApplyStyle({ backgroundColor: backgroundColor })
     }
 
     Render() {
@@ -18,9 +29,8 @@ class MainView {
 
                 minimizeButton := titleBar.AddChild("MinimizeButton", this.styleSheet)
                 expandButton := titleBar.AddChild("ExpandButton", this.styleSheet)
-                closeButton := titleBar.AddChild("CloseButton", this.styleSheet) ; , { backgroundColor: "0xffffff" })
-                ; closeButton.ApplyStyle({ backgroundColor: "0xFFA500" })
-                closeButton.On("mouseEnter", (component) => component.ApplyStyle({ backgroundColor: "0xFFA500" }))
-                closeButton.On("mouseExit", (component) => component.ApplyStyle({ backgroundColor: "0xFF0000" }))
+                closeButton := titleBar.AddChild("CloseButton", this.styleSheet)
+                    closeButton.On("mouseEnter", (el) => this.HandleMouseEnter(el, "0x000080"))
+                    closeButton.On("mouseExit", (el) => this.HandleMouseExit(el, "0xFF0000"))
     }
 }
