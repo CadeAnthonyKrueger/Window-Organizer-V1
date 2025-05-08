@@ -10,13 +10,6 @@ class Alignment extends StyleAspect {
         this.justify := justify
         this.align := align
         this.layout := unset
-
-        this.properties := Map(
-            "display", this.display,
-            "flexDirection", this.flexDirection,
-            "justify", this.justifyContent,
-            "align", this.alignItems
-        )
     }
 
     ResolveChildren(container) {
