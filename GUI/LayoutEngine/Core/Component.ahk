@@ -9,10 +9,10 @@
 ; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
 
 class Component {
-    __New(name, styleSheet := 0, parent := 0) {
+    __New(name, styleSheet := 0, inlineStyle := {}, parent := 0) {
         this.name := name
         this.parent := parent
-        this.style := StyleBuilder.Build(name, styleSheet)
+        this.style := StyleBuilder.Build(name, styleSheet, inlineStyle)
         this.children := []
         this.positionIsResolved := false
         this.control := unset

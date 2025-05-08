@@ -1,8 +1,9 @@
 #Requires AutoHotkey v2.0
-
 #Include ./EventDispatcher.ahk
 
 class MouseTracker {
+    static instance := ""
+
     __New(window) {
         this.window := window
         this.textCtrl := ""
@@ -11,8 +12,25 @@ class MouseTracker {
         SetTimer(this.Track.Bind(this), 30)
     }
 
-    Initialize() {
-        this.textCtrl := this.window.GetWindow().AddText("x10 y10 w200", "")
+    static GetInstance(window := unset) {
+        try {
+            if MouseTracker.instance = ""
+            {
+                if !IsSet(window)
+                    throw Error("MouseTracker requires a window on first call to GetInstance()")
+                MouseTracker.instance := MouseTracker(window)
+            }
+        } catch {
+            if !IsSet(window)
+                throw Error("MouseTracker requires a window on first call to GetInstance()")
+            MouseTracker.instance := MouseTracker(window)
+        }
+        return MouseTracker.instance
+    }
+
+    static Initialize(window) {
+        inst := MouseTracker.GetInstance(window)
+        inst.textCtrl := inst.window.GetWindow().AddText("x10 y10 w200", "")
     }
 
     Track() {

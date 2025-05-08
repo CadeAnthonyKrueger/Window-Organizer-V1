@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0 
 
 #Include ./Component.ahk
+#Include ./MouseTracker.ahk
 
 class Window extends Component {
     __New(name, styleSheet) {
@@ -10,11 +11,10 @@ class Window extends Component {
         this.windowX := 0
         this.windowY := 0
         this.window := Gui("-Caption +AlwaysOnTop", "Window Organizer")
-        this.mouseTracker := MouseTracker(this)
     }
 
     Show() {
-        this.mouseTracker.Initialize()
+        MouseTracker.Initialize(this)
         this.window.BackColor := this.style.appearance.backgroundColor
         this.window.Show(Format("w{} h{}", this.style.dimension.w, this.style.dimension.h))
         this.SetWindowCoords()
