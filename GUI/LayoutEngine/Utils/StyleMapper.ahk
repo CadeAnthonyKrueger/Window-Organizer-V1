@@ -28,7 +28,14 @@ class StyleMapper {
 
     static GetClassName(key) {
         for className, aspects in StyleMapper.styleAspects {
-            if (key in aspects["styles"]) {
+            keyInAspects := false
+            for style in aspects["styles"] {
+                if style = key {
+                    keyInAspects := true
+                    break
+                }
+            }
+            if keyInAspects {
                 return className
             }
         }
