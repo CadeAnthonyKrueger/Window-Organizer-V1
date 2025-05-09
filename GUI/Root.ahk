@@ -1,25 +1,34 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
-#Include ./LayoutEngine/Renderer.ahk
-#Include ./LayoutEngine/Core/Window.ahk
-#Include ./LayoutEngine/Core/Style.ahk
-#Include ./LayoutEngine/Core/Dimension.ahk
-#Include ./LayoutEngine/Core/Alignment.ahk
-#Include ./LayoutEngine/Core/Appearance.ahk
-#Include ./LayoutEngine/Core/MouseTracker.ahk
-#Include ./LayoutEngine/Core/Cursor.ahk
+; #Include ./LayoutEngine/Renderer.ahk
+; #Include ./LayoutEngine/Core/Window.ahk
+; #Include ./LayoutEngine/Core/Style.ahk
+; #Include ./LayoutEngine/Core/Dimension.ahk
+; #Include ./LayoutEngine/Core/Alignment.ahk
+; #Include ./LayoutEngine/Core/Appearance.ahk
+; #Include ./LayoutEngine/Core/MouseTracker.ahk
+; #Include ./LayoutEngine/Core/Cursor.ahk
+; #Include ./Components/MainView.ahk
+#Include ./LayoutEngine/Engine.ahk
 #Include ./Components/MainView.ahk
 #Include ./Utils/Path.ahk
 
-global root := Window("Root", Path.Resolve(A_LineFile, "Root.ini"))
+Engine.CreateRoot(
+    entryPoint := MainView, 
+    appName := "Window Organizer", 
+    appIconPath := Path.Resolve(A_LineFile, "Assets/logo.ico"), 
+    styleSheet := Path.Resolve(A_LineFile, "Root.ini")
+)
 
-MainView(root).Render()
+; global root := Window("Root", Path.Resolve(A_LineFile, "Root.ini"))
 
-root.Initialize()
+; MainView(root).Render()
 
-Renderer.RenderAll()
+; root.Initialize()
 
-root.Show()
+; Renderer.RenderAll()
+
+; root.Show()
 
 ; mainView := Container( , AlignmentStyles(1, 1, windowWidth-2, windowHeight-2, , , , , "0x211D26", ))
 ; titleBar := Container(mainView, AlignmentStyles(0, 0, windowWidth-2, titleButtonHeight, , , , , "0x15141B", ))

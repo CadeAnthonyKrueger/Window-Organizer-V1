@@ -1,32 +1,40 @@
 #Requires AutoHotkey v2.0
-#Include ../../Root.ahk
-#Include ../Renderer.ahk
-#Include ./Style.ahk
-#Include ./EventDispatcher.ahk
-#Include ../Utils/StyleBuilder.ahk
 
-; Alignment Styles:
-; x, y, height, width, display, flex-direcion, justify-content, align-items, background-color, color
+#Include ../Styling/Utils/StyleBuilder.ahk
+#Include ../Utils/Validator.ahk
 
 class Component {
-    __New(name, styleSheet := 0, inlineStyle := {}, parent := 0) {
-        this.name := name
-        this.parent := parent
-        this.style := StyleBuilder.Build(name, styleSheet, inlineStyle)
+    __New() {
+        this.name := unset
+        this.parent := unset
+        this.style := unset
         this.children := []
         this.positionIsResolved := false
         this.control := unset
         this.eventHandlers := Map()
     }
 
-    Initialize(depth := 0) {
+    Initialize(params) {
+        validParams := Map("name", "", "styleSheet", "", "inlineStyle", {}, "parent", "")
+        validParams := Validator.ValidateParams(params, validParams, ["name"])
+
+        this.name := validParams["name"]
+        this.parent := validParams["parent"]
+        this.style := StyleBuilder.Build(validParams["name"], validParams["styleSheet"], validParams["inlineStyle"])
+    }
+
+    Deinitialize() {
+        
+    }
+
+    PrepareForRender(depth := 0) {
         this.style.ResolvePosition(this, this.parent)
         this.SetPositionResolved()
-        if this.parent != 0 {
+        if !this.parent {
             Renderer.Add(this, depth)
         }
         for child in this.children {
-            child.Initialize(depth + 1)
+            child.PrepareForRender(depth + 1)
         }
         return this
     }
