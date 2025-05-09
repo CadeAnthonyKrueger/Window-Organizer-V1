@@ -1,0 +1,95 @@
+🧠 Rendering & Z-Index System
+Flat Render List (not tree-structured)
+
+Sorted by: tree depth → z-index.
+
+Children rendered correctly regardless of parent due to absolute z-ordering.
+
+Render Index Optimization
+
+Each component stores a renderIndex for quick lookup.
+
+On rerender, only components after the changed index in the list are rerendered.
+
+Helps when rerendering only affects tail end of depth list (e.g. element 45 of 50).
+
+Layer Repainting
+
+Whole layer can be marked dirty and rerendered to ensure proper visual stacking.
+
+Ensures that updated children don’t render under older visuals.
+
+🧱 Component Design & Folder Structure
+ComponentCore Folder
+
+Split into:
+
+Subclasses/ → true inheritance (Button, Input, etc.).
+
+Mixins/ → composition (Hoverable, Renderable, etc.).
+
+Component Class Bloat Mitigation
+
+Renderer-related logic (like renderIndex) offloaded into a Renderable mixin.
+
+Like the style object—isolated logic avoids stuffing Component.
+
+🧼 Memory Management
+Emphasis on manual init() and deinit() to prevent memory leaks.
+
+When component is removed, clean up:
+
+Itself
+
+Its mixins
+
+Any recursive children
+
+🏭 Factory & Recycling System
+✅ Abstract Factory (with Entity Recycling):
+java
+Copy
+Edit
+public abstract class AbstractFactory {
+    protected final Queue<FactoryObject> recycledEntities;
+
+    public AbstractFactory() {
+        recycledEntities = new ArrayDeque<>();
+    }
+
+    public FactoryObject GetEntity(FactoryParameter<?> param) {
+        FactoryObject newEntity = recycledEntities.poll();
+        if (newEntity == null) {
+            newEntity = CreateNew(param);
+        }
+        newEntity.Initialize();
+        return newEntity;
+    }
+
+    public void RecycleEntity(FactoryObject deadEntity) {
+        recycledEntities.add(deadEntity);
+        deadEntity.Deinitialize();
+    }
+
+    protected abstract FactoryObject CreateNew(FactoryParameter<?> param);
+}
+✅ Example Concrete Factory:
+java
+Copy
+Edit
+public class CrocodileFactory extends AbstractFactory {
+    @Override
+    protected Crocodile CreateNew(FactoryParameter<?> param) {
+        return new Crocodile();
+    }
+}
+Entities are pooled for reuse (recycledEntities).
+
+Reduces GC overhead by reinitializing rather than instantiating every time.
+
+🧩 Additional Notes
+State Manager: Uses dirty flags to avoid rerendering unchanged components.
+
+"Z-index" becomes actual position in flat list—no need for per-parent sorting.
+
+Flat list is just a smart ArrayList<Component> (custom wrapper for indexing, dirty tracking, etc.).
