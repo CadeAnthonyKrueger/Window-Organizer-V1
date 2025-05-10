@@ -13,6 +13,7 @@ class Component {
         this.control := unset
         this.eventHandlers := Map()
         this.depth := unset
+        this.childGroupIndex := unset
     }
 
     Initialize(params) {
@@ -41,9 +42,9 @@ class Component {
         return this
     }
 
-    GetRenderInfo(&depth, &layer) {
+    GetRenderInfo(&depth, &parentGroupIndex) {
         depth := this.depth
-        layer := this.style.alignment.zIndex
+        parentGroupIndex := 
     }
 
     SetPositionResolved() {
@@ -87,6 +88,16 @@ class Component {
             handler := this.eventHandlers[event]
             if IsSet(handler)
                 handler.Call(this)
+        }
+    }
+
+    GetZIndex() {
+        return this.style.alignment.zIndex
+    }
+
+    SetParentGroupIndex(index) {
+        if this.parent {
+            this.parent.childGroupIndex := index
         }
     }
 
