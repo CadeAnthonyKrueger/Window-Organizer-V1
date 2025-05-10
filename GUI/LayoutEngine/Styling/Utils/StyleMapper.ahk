@@ -7,7 +7,7 @@ class StyleMapper {
 
     static styleAspects := Map(
         "Dimension", Map("styles", ["x", "y", "w", "h"], "classRef", Dimension),
-        "Alignment", Map("styles", ["display", "flexDirection", "justify", "align"], "classRef", Alignment),
+        "Alignment", Map("styles", ["display", "flexDirection", "justify", "align", "zIndex"], "classRef", Alignment),
         "Appearance", Map("styles", ["backgroundColor", "color"], "classRef", Appearance)
     )
 

@@ -4,11 +4,12 @@
 #Include ./LayoutTypes/FlexLayout.ahk
 
 class Alignment extends StyleAspect {
-    __New(display := "none", flexDirection := "row", justify := "start", align := "start") {
+    __New(display := "none", flexDirection := "row", justify := "start", align := "start", zIndex := 0) {
         this.display := display
         this.flexDirection := flexDirection
         this.justify := justify
         this.align := align
+        this.zIndex := zIndex
         this.layout := unset
     }
 
@@ -25,11 +26,12 @@ class Alignment extends StyleAspect {
             "display", "none",
             "flexDirection", "row",
             "justify", "start",
-            "align", "start"
+            "align", "start",
+            "zIndex", 0
         )
     }
 
     static CallConstructor(map) {
-        return Alignment(map["display"], map["flexDirection"], map["justify"], map["align"])
+        return Alignment(map["display"], map["flexDirection"], map["justify"], map["align"], map["zIndex"])
     }
 }

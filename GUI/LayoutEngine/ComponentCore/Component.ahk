@@ -12,6 +12,7 @@ class Component {
         this.positionIsResolved := false
         this.control := unset
         this.eventHandlers := Map()
+        this.depth := unset
     }
 
     Initialize(params) {
@@ -28,6 +29,7 @@ class Component {
     }
 
     PrepareForRender(depth := 0) {
+        this.depth := depth
         this.style.ResolvePosition(this, this.parent)
         this.SetPositionResolved()
         if !this.parent {
@@ -39,11 +41,17 @@ class Component {
         return this
     }
 
+    GetRenderInfo(&depth, &layer) {
+        depth := this.depth
+        layer := this.style.alignment.zIndex
+    }
+
     SetPositionResolved() {
         this.positionIsResolved := true
     }
 
     AddChild(name, styleSheet, inlineStyle := {}) {
+        ; this should be a call to the compnent manager to create a new element
         child := Component(name, styleSheet, inlineStyle, this)
         this.children.Push(child)
         return child
@@ -83,6 +91,7 @@ class Component {
     }
 
     Render() {
+        ; this should be a call to component manager which calls the window managers method to add control to the gui
         this.control := root.GetWindow().AddText(this.style.ToString())
     }
 
