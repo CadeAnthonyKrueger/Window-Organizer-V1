@@ -2,7 +2,7 @@
 #SingleInstance Force
 
 #Include ../Factories/ComponentFactory.ahk
-#Include ./ComponentTree.ahk
+#Include ../ComponentCore/ComponentTree.ahk
 
 class ComponentManager {
     static instance := ""
