@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0 
 
 #Include ../Utils/ArrayHelper.ahk
+#Include ../Utils/Stack.ahk
 
 ; ComponentTree is responsible for keeping a structured ordering of all the active components for a given window.
 ; This is used to perform efficient operations on components as well as keep things in proper order for rendering.
@@ -10,7 +11,7 @@ class ComponentTree {
         this.removedIndexes := []
     }
 
-    ; O(k) worst case, where k is the length of a given parentChildList
+    ; O(k + m) worst case, where k is the length of a given parentChildList and m is the length of a given depth's parentChildLists
     Add(component) {
         ; depth => distance from the root; parentGroupIndex => parent's index reference to it's children in the layer below
         component.GetRenderInfo(&depth, &parentGroupIndex)
@@ -21,13 +22,19 @@ class ComponentTree {
         currentDepth := this.nestedTree[depth]
         ; Create new list of children (corresponding to a single parent in the layer above) if not already exists for a given depth
         if parentGroupIndex = "" {
-            parentGroupIndex := currentDepth["parentChildLists"].Length
+            ; Insert group in proper order based on parent ordering (updating other group indexes as you go)
+            getParent := (el) => this.nestedTree[depth - 1][el.parentGroupIndex][el.parentIndex]
+            parentGroupIndex := ArrayHelper.ReverseInsert(
+                arr := currentDepth["parentChildLists"],
+                el := { 
+                    parentGroup: parentGroupIndex, 
+                    parentIndex: component.parent.listIndex,
+                    list: []
+                },
+                func := (el) => getParent(el).SetChildGroupIndex((prev) => prev + 1),
+                cond := (el1, el2) => getParent(el1).listIndex < getParent(el2).listIndex
+            )
             component.SetParentGroupIndex((prev) => parentGroupIndex)
-            currentDepth["parentChildLists"].Push({ 
-                parentGroup: parentGroupIndex, 
-                parentIndex: component.parent.listIndex,
-                list: []
-            })
         }
         ; Insert into the proper child list based on zIndex and save its place in the child list (updating other list indexes as you go)
         listIndex := ArrayHelper.ReverseInsert(
@@ -41,19 +48,23 @@ class ComponentTree {
 
     ; O(k) where k is the number of child components, added time if tree needs to compact afterwards
     Remove(component, initialCall := true) {
-        ; listIndex => the index of this component within its respective child list
-        component.GetRenderInfo(&depth, &parentGroupIndex, &listIndex)
-        this.nestedTree[depth]["parentChildLists"][parentGroupIndex].list[listIndex] := ""
-        this.removedIndexes.Push(
-            Map("depth", depth, "parentGroupIndex", parentGroupIndex, "listIndex", listIndex)
-        )
-        ; Recursively remove all child components as well
-        for childComponent in component.children {
-            this.Remove(childComponent, false)
+        stack := Stack(component)
+        while stack.Length > 0 {
+            currentComponent := stack.Pop()
+            currentComponent.GetRenderInfo(&depth, &parentGroupIndex, &listIndex)
+            this.nestedTree[depth]["parentChildLists"][parentGroupIndex].list[listIndex] := ""
+            this.removedIndexes.Push(
+                Map("depth", depth, "parentGroupIndex", parentGroupIndex, "listIndex", listIndex)
+            )
+            
+            ; Add child components to the stack for later removal
+            for childComponent in currentComponent.children {
+                stack.Push(childComponent)
+            }
         }
         ; If the tree has too many empty values, we want to compact it
         if this.removedIndexes.Length >= 75 and initialCall {
-            this.CompactTree()
+            this.CondenseTree()
             this.removedIndexes := []
         }
     }
@@ -97,7 +108,7 @@ class ComponentTree {
     }
 
     ; O(r x m) worst case, where r is # of removed components (75 max) and m is # of components in the tree
-    CompactTree() {
+    CondenseTree() {
         ; For every space in the tree that has been removed 
         for emptySpace in this.removedIndexes {
             if !this.nestedTree.Has(emptySpace["depth"]) {
@@ -129,6 +140,45 @@ class ComponentTree {
             }
         }
     }
+
+    ; Print out the tree in a readable way for debugging and visualization
+    PrintTree() {
+        try
+            rootList := this.nestedTree[1]["parentChildLists"][1]
+        catch
+            return
+    
+        treeString := ""
+        addToTreeString := (t, n, z, d, g, i) => treeString .= Format("{}{} z={} depth={} group={} index={}`n", t, n, z, d, g, i)
+    
+        for root in rootList {
+            if !IsObject(root)
+                continue
+            try {
+                addToTreeString("", root.name, root.GetZIndex(), root.depth, root.childGroupIndex, root.listIndex)
+                stack := Stack()
+                stack.Push(Map("component", root, "indent", "`t"))
+    
+                while !stack.IsEmpty() {
+                    item := stack.Pop()
+                    comp := item["component"]
+                    indent := item["indent"]
+    
+                    for child in comp.children {
+                        if !IsObject(child)
+                            continue
+                        try {
+                            addToTreeString(indent, child.name, child.GetZIndex(), child.depth, child.childGroupIndex, child.listIndex)
+                            stack.Push(Map("component", child, "indent", indent . "`t"))
+                        }
+                    }
+                }
+            }
+        }
+    
+        MsgBox treeString
+        return treeString
+    }      
 }
 
 ; EXAMPLE:
