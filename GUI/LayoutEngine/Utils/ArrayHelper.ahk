@@ -1,6 +1,21 @@
 #Requires AutoHotkey v2.0 
 
 class ArrayHelper {
+    static ReverseInsert(arr, el, func, cond) {
+        idx := arr.Length
+        while idx >= 1 {
+            if cond(el, arr[idx]) {
+                arr.InsertAt(idx + 1, el)
+                return idx + 1
+            } else {
+                func(arr[idx])
+            }
+            idx--
+        }
+        arr.InsertAt(1, el)
+        return 1
+    }
+
     static BinaryInsert(arr, el, func, cond) {
         if arr.Length = 0 {
             arr.Push(el)

@@ -13,7 +13,7 @@ class Component {
         this.control := unset
         this.eventHandlers := Map()
         this.depth := unset
-        this.childGroupIndex := 1
+        this.childGroupIndex := unset
         this.listIndex := unset
     }
 
@@ -100,10 +100,7 @@ class Component {
     }
 
     SetParentGroupIndex(callback) {
-        this.parent.childGroupIndex := callback(this.parent.childGroupIndex)
-        if this.parent {
-            this.parent.childGroupIndex := callback(this.parent.childGroupIndex)
-        }
+        this.parent.childGroupIndex := this.parent ? callback(this.parent.childGroupIndex) : 1
     }
 
     SetChildGroupIndex(callback) {
