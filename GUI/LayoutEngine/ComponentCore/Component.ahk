@@ -13,7 +13,8 @@ class Component {
         this.control := unset
         this.eventHandlers := Map()
         this.depth := unset
-        this.childGroupIndex := unset
+        this.childGroupIndex := 1
+        this.listIndex := unset
     }
 
     Initialize(params) {
@@ -42,9 +43,12 @@ class Component {
         return this
     }
 
-    GetRenderInfo(&depth, &parentGroupIndex) {
+    GetRenderInfo(&depth, &parentGroupIndex, &listIndex) {
         depth := this.depth
-        parentGroupIndex := 
+        if this.parent {
+            parentGroupIndex := this.parent.childGroupIndex
+        }
+        listIndex := this.listIndex
     }
 
     SetPositionResolved() {
@@ -99,6 +103,10 @@ class Component {
         if this.parent {
             this.parent.childGroupIndex := index
         }
+    }
+
+    SetListIndex(index) {
+        this.listIndex := index
     }
 
     Render() {

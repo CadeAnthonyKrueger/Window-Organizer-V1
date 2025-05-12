@@ -21,5 +21,6 @@ class ArrayHelper {
             }
         }
         arr.InsertAt(low, el)
+        return low
     }
 }
