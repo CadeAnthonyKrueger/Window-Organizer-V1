@@ -99,14 +99,19 @@ class Component {
         return this.style.alignment.zIndex
     }
 
-    SetParentGroupIndex(index) {
+    SetParentGroupIndex(callback) {
+        this.parent.childGroupIndex := callback(this.parent.childGroupIndex)
         if this.parent {
-            this.parent.childGroupIndex := index
+            this.parent.childGroupIndex := callback(this.parent.childGroupIndex)
         }
     }
 
-    SetListIndex(index) {
-        this.listIndex := index
+    SetChildGroupIndex(callback) {
+        this.childGroupIndex := callback(this.childGroupIndex)
+    }
+
+    SetListIndex(callback) {
+        this.listIndex := callback(this.listIndex)
     }
 
     Render() {

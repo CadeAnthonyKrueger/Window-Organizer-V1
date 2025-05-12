@@ -3,7 +3,7 @@
 #Include ../Utils/ArrayHelper.ahk
 
 ; ComponentTree is responsible for keeping a structured ordering of all the active components for a given window.
-; This is used to perform efficeint operations on components as well as keep things in proper order for rendering.
+; This is used to perform efficient operations on components as well as keep things in proper order for rendering.
 class ComponentTree {
     __New() {
         this.nestedTree := []
@@ -16,15 +16,14 @@ class ComponentTree {
         component.GetRenderInfo(&depth, &parentGroupIndex)
         ; Create new layer if not already exists
         if !this.nestedTree.Has(depth) or this.nestedTree[depth] = "" {
-            this.nestedTree[depth] := Map("parentChildLists", [], "startIndices", [], "flatLength", 0)
+            this.nestedTree[depth] := Map("parentChildLists", [])
         }
         currentDepth := this.nestedTree[depth]
         ; Create new list of children (corresponding to a single parent in the layer above) if not already exists for a given depth
         if parentGroupIndex = "" {
-            currentDepth["startIndices"].Push(currentDepth["flatLength"] + 1)
             currentDepth["parentChildLists"].Push([])
             parentGroupIndex := currentDepth["parentChildLists"].Length
-            component.SetParentGroupIndex(parentGroupIndex)
+            component.SetParentGroupIndex((prev) => parentGroupIndex)
         }
         ; Insert into the proper child list based on zIndex and save its place in the child list
         listIndex := ArrayHelper.BinaryInsert(
@@ -33,8 +32,7 @@ class ComponentTree {
             func := (el) => el.GetZIndex(),
             cond := (z1, z2) => z1 < z2
         )
-        component.SetListIndex(listIndex)
-        currentDepth["flatLength"] += 1
+        component.SetListIndex((prev) => listIndex)
     }
 
     ; O(k) where k is the number of child components, added time if tree needs to compact afterwards
@@ -131,13 +129,11 @@ class ComponentTree {
             ; Now that a component has been removed, check if a parent's child group needs to be removed
             if componentGroup.Length == 0 {
                 parentChildLists.RemoveAt(emptySpace["parentGroupIndex"])
-                ; Update all parent index refs to their child groups in the depth below, shifting by -1
-                for group in ArrayHelper.SliceArray(parentChildLists, emptySpace["parentGroupIndex"]) {
-                    if emptySpace["parent"] {
-                        emptySpace["parent"].SetChildGroupIndex((prev) => prev - 1)
-                        break
-                    }
+                ; Update parent index ref to it's child group in the depth below, shifting by -1
+                if emptySpace["parent"] {
+                    emptySpace["parent"].SetChildGroupIndex((prev) => prev - 1)
                 }
+                
                 ; If this results in an entire depth being empty, this is the lowest depth in the tree and can be removed
                 if parentChildLists.Length == 0 {
                     this.nestedTree.RemoveAt(emptySpace["depth"])
