@@ -22,7 +22,7 @@ class MainView {
         el.ApplyStyle({ backgroundColor: backgroundColor })
     }
 
-    Render() {
+    Create() {
         mainView := this.parent.AddChild("MainView", this.styleSheet)
 
             titleBar := mainView.AddChild("TitleBar", this.styleSheet)
@@ -30,7 +30,12 @@ class MainView {
                 minimizeButton := titleBar.AddChild("MinimizeButton", this.styleSheet)
                 expandButton := titleBar.AddChild("ExpandButton", this.styleSheet)
                 closeButton := titleBar.AddChild("CloseButton", this.styleSheet)
+                
                     closeButton.On("mouseEnter", (el) => this.HandleMouseEnter(el, "0x000080"))
                     closeButton.On("mouseExit", (el) => this.HandleMouseExit(el, "0xFF0000"))
+
+            DynamicView(mainView).Create()
+
+        return mainView
     }
 }

@@ -1,35 +1,25 @@
 #Requires AutoHotkey v2.0
-#SingleInstance Force
 
 #Include ../Factories/ComponentFactory.ahk
 #Include ../ComponentCore/ComponentTree.ahk
 
 class ComponentManager {
-    static instance := ""
-    static allowConstruction := false
-
     __New() {
-        if !ComponentManager.allowConstruction
-            throw "ComponentManager is a singleton and cannot be instantiated directly. Use GetInstance()."
-        this.componentFactory := unset
-        this.componentTree := unset
-    }
-
-    static GetInstance() {
-        if ComponentManager.instance = "" {
-            ComponentManager.allowConstruction := true
-            ComponentManager.instance := ComponentManager()
-            ComponentManager.allowConstruction := false
-        }
-        return ComponentManager.instance
-    }
-
-    static Initialize() {
-        this.GetInstance().Initialize()
-    }
-
-    Initialize() {
         this.componentFactory := ComponentFactory()
         this.componentTree := ComponentTree()
+    }
+
+    CreateComponent(name, styleSheet, inlineStyle, parent) {
+        newComponent := this.componentFactory.GetElement({ name: name, styleSheet: styleSheet, inlineStyle: inlineStyle, parent: parent})
+        this.componentTree.Add(newComponent)
+        return newComponent
+    }
+
+    RenderAll() {
+        this.componentTree.ForEach((component) => component.Render())
+    }
+
+    RenderFrom(component) {
+        this.componentTree.ForEach((component) => component.Render(), component)
     }
 }

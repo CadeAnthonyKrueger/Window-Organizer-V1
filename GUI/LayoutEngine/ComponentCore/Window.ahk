@@ -3,20 +3,23 @@
 #Include ./Component.ahk
 #Include ../Utils/Validator.ahk
 #Include ../Utils/MapHelper.ahk
+#Include ../Managers/ComponentManager.ahk
 
 class Window extends Component {
     __New() {
         super.__New()
+        this.windowID := unset
         this.windowX := 0
         this.windowY := 0
-        this.window := unset
+        this.gui := unset
+        this.componentManager := unset
     }
 
     Initialize(params) {
-        splitParams := MapHelper.SplitMap(params, ["name", "styleSheet", "inlineStyle"], ["appIconPath", "guiParams"])
+        splitParams := MapHelper.SplitMap(params, ["name", "styleSheet", "inlineStyle"], ["appIconPath", "guiParams", "id"])
         super.Initialize(splitParams[1])
 
-        validParams := Map("appIconPath", "", "guiParams", "-Caption +AlwaysOnTop")
+        validParams := Map("appIconPath", "", "guiParams", "-Caption +AlwaysOnTop", "id", 1)
         validParams := Validator.ValidateParams(splitParams[2], validParams)
 
 
@@ -24,7 +27,9 @@ class Window extends Component {
             TraySetIcon(validParams["appIconPath"])
         }
         ;CoordMode("Mouse", "Screen")
-        this.window := Gui(validParams["guiParams"], this.name)
+        this.windowID := validParams["id"]
+        this.gui := Gui(validParams["guiParams"], this.name)
+        this.componentManager := ComponentManager()
         ;Cursor.Initialize()
     }
 
@@ -51,6 +56,10 @@ class Window extends Component {
     }
 
     GetWindow() {
-        return this.window
+        return this.gui
+    }
+
+    GetComponentManager() {
+        return this.componentManager
     }
 }

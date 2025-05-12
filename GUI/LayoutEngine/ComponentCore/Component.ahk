@@ -2,9 +2,11 @@
 
 #Include ../Styling/Utils/StyleBuilder.ahk
 #Include ../Utils/Validator.ahk
+#Include ../Input/EventDispatcher.ahk
 
 class Component {
     __New() {
+        this.parentWindow := unset
         this.name := unset
         this.parent := unset
         this.style := unset
@@ -56,8 +58,11 @@ class Component {
     }
 
     AddChild(name, styleSheet, inlineStyle := {}) {
-        ; this should be a call to the compnent manager to create a new element
-        child := Component(name, styleSheet, inlineStyle, this)
+        if !this.parentWindow {
+            this.parentWindow := this.parentWindow
+        }
+        componentManager := this.parentWindow.GetComponentManager()
+        child := componentManager.CreateComponent(name, styleSheet, inlineStyle, this)
         this.children.Push(child)
         return child
     }
@@ -113,7 +118,7 @@ class Component {
 
     Render() {
         ; this should be a call to component manager which calls the window managers method to add control to the gui
-        this.control := root.GetWindow().AddText(this.style.ToString())
+        this.control := this.parentWindow.GetWindow().AddText(this.style.ToString())
     }
 
     ToString() {

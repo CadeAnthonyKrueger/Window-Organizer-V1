@@ -37,12 +37,14 @@ class WindowManager {
 
     CreateRootWindow(entryPoint, appName, appIconPath, styleSheet, inlineStyle, guiParams) {
         this.windows.Push(this.windowFactory.GetElement({ 
-            name: appName, appIconPath: appIconPath, styleSheet: styleSheet, inlineStyle: inlineStyle, guiParams: guiParams, 
+            name: appName, appIconPath: appIconPath, styleSheet: styleSheet, 
+            inlineStyle: inlineStyle, guiParams: guiParams, id: this.windows.Length + 1
         }))
-        currentWindow := this.windows[this.windows.Length]
-        entryPoint(currentWindow).Render()
-        currentWindow.PrepareForRender()
-        ; This is where we should render all. Or maybe show shouldnt be here
-        ; currentWindow.Show()
+        currentWindowID := this.windows.Length
+        currentWindow := this.windows[currentWindowID]
+        entryPoint(currentWindow).Create()
+        currentWindow.PrepareForRender(0, currentWindowID)
+        currentWindow.RenderAllComponents()
+        currentWindow.Show()
     }
 }
