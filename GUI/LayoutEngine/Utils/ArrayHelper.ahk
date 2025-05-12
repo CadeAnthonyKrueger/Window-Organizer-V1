@@ -23,4 +23,15 @@ class ArrayHelper {
         arr.InsertAt(low, el)
         return low
     }
+
+    static SliceArray(arr, start, length := "") {
+        result := []
+        ; Adjust for 1-based indexing
+        endIndex := (length != "") ? (start + length - 1) : arr.Length
+        Loop (endIndex - start + 1) {
+            i := start + A_Index - 1
+            result.Push(arr[i])
+        }
+        return result
+    }    
 }

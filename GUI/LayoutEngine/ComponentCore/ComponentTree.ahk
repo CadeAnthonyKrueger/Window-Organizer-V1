@@ -7,7 +7,7 @@
 class ComponentTree {
     __New() {
         this.nestedTree := []
-        this.dirtyFlagCount := 0
+        this.removedIndexes := []
     }
 
     ; O(log k) worst case, where k is the length of a given parentChildList
@@ -47,10 +47,12 @@ class ComponentTree {
             this.Remove(childComponent, false)
         }
         ; If the tree has too many empty values, we want to compact it
-        this.dirtyFlagCount++
-        if this.dirtyFlagCount >= 75 and initialCall {
+        this.removedIndexes.Push(
+            Map("depth", depth, "parentGroupIndex", parentGroupIndex, "listIndex", listIndex, "parent", component.parent)
+        )
+        if this.removedIndexes.Length >= 75 and initialCall {
             this.CompactTree()
-            this.dirtyFlagCount := 0
+            this.removedIndexes := []
         }
     }
 
@@ -113,19 +115,33 @@ class ComponentTree {
         }
     }
 
+    ; O(r x m) worst case, where r is # of removed components (75 max) and m is # of components in the tree
     CompactTree() {
-        callback := (depthIndex, groupIndex, listIndex) => this.CompactCallback(depthIndex, groupIndex, listIndex)
-        this.ForEach(callback, , reverse := true, checkExistence := false, callbackOnComponent := false)
-    }
-
-    CompactCallback(currentDepthIndex, currentGroupIndex, currentListIndex) {
-        parentChildLists := this.nestedTree[currentDepthIndex]["parentChildLists"]
-        componentGroup := parentChildLists[currentGroupIndex]
-        componentGroup.RemoveAt(currentListIndex)
-        if componentGroup.Length == 0 {
-            parentChildLists.RemoveAt(currentGroupIndex)
-            if parentChildLists.Length == 0 {
-                this.nestedTree.RemoveAt(currentDepthIndex)
+        ; For every space in the tree that has been removed 
+        for emptySpace in this.removedIndexes {
+            parentChildLists := this.nestedTree[emptySpace["depth"]]["parentChildLists"]
+            componentGroup := parentChildLists[emptySpace["parentGroupIndex"]]
+            componentGroup.RemoveAt(emptySpace["listIndex"])
+            ; Shift all subsequent component's list index by -1
+            for component in ArrayHelper.SliceArray(componentGroup, emptySpace["listIndex"]) {
+                if component {
+                    component.SetListIndex((prev) => prev - 1)
+                }
+            }
+            ; Now that a component has been removed, check if a parent's child group needs to be removed
+            if componentGroup.Length == 0 {
+                parentChildLists.RemoveAt(emptySpace["parentGroupIndex"])
+                ; Update all parent index refs to their child groups in the depth below, shifting by -1
+                for group in ArrayHelper.SliceArray(parentChildLists, emptySpace["parentGroupIndex"]) {
+                    if emptySpace["parent"] {
+                        emptySpace["parent"].SetChildGroupIndex((prev) => prev - 1)
+                        break
+                    }
+                }
+                ; If this results in an entire depth being empty, this is the lowest depth in the tree and can be removed
+                if parentChildLists.Length == 0 {
+                    this.nestedTree.RemoveAt(emptySpace["depth"])
+                }
             }
         }
     }
