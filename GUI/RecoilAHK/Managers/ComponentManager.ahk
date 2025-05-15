@@ -2,6 +2,7 @@
 
 #Include ../Factories/ComponentFactory.ahk
 #Include ../ComponentCore/ComponentTree.ahk
+#Include ../Rendering/ComponentRenderer.ahk
 
 class ComponentManager {
     __New() {
@@ -16,10 +17,10 @@ class ComponentManager {
     }
 
     RenderAll() {
-        this.componentTree.ForEach((component) => component.Render())
+        ComponentRenderer.RenderAll(this.componentTree)
     }
 
     RenderFrom(component) {
-        this.componentTree.ForEach((component) => component.Render(), component)
+        ComponentRenderer.RenderAll(this.componentTree, component)
     }
 }

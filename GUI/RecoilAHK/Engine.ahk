@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
-#Include ./Managers/Exports.ahk
+#Include ./Managers/WindowManager.ahk
 
 class Engine {
     static instance := ""
@@ -22,7 +22,8 @@ class Engine {
         return Engine.instance
     }
 
-    static CreateRoot(entryPoint, appName := unset, appIconPath := unset, styleSheet := unset, inlineStyle := unset, guiParams := unset) {
+    static CreateRoot(entryPoint, appName := unset, appIconPath := unset, styleSheet := unset, inlineStyle := unset, guiParams := unset) 
+    {
         if !Engine.isInitialized {
             Engine.GetInstance().Initialize()
             Engine.isInitialized := true
@@ -33,5 +34,6 @@ class Engine {
     Initialize() {
         WindowManager.Initialize()
         ; ... other manager inits
+        WindowManager.ShowWindow("Main")
     }
 }

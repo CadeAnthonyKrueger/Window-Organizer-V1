@@ -32,15 +32,11 @@ class Component {
         
     }
 
-    PrepareForRender(depth := 0) {
-        this.depth := depth
+    ResolvePosition() {
         this.style.ResolvePosition(this, this.parent)
         this.SetPositionResolved()
-        if !this.parent {
-            Renderer.Add(this, depth)
-        }
         for child in this.children {
-            child.PrepareForRender(depth + 1)
+            child.ResolvePosition()
         }
         return this
     }
@@ -64,6 +60,7 @@ class Component {
         componentManager := this.parentWindow.GetComponentManager()
         child := componentManager.CreateComponent(name, styleSheet, inlineStyle, this)
         this.children.Push(child)
+        this.depth := this.parent.depth + 1
         return child
     }
 
@@ -117,7 +114,6 @@ class Component {
     }
 
     Render() {
-        ; this should be a call to component manager which calls the window managers method to add control to the gui
         this.control := this.parentWindow.GetWindow().AddText(this.style.ToString())
     }
 

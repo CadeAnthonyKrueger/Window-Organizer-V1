@@ -1,11 +1,11 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
-#Include ./LayoutEngine/Engine.ahk
+#Include ./RecoilAHK/RecoilAHK.ahk
 #Include ./Components/MainView.ahk
 #Include ./Utils/Path.ahk
 
-Engine.CreateRoot(
+RecoilAHK.CreateRoot(
     entryPoint := MainView, 
     appName := "Window Organizer", 
     appIconPath := Path.Resolve(A_LineFile, "Assets/logo.ico"), 
