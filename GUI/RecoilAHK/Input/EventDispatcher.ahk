@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0 
 
-#Include ../ComponentCore/Hoverable.ahk
+#Include ../ComponentCore/Extensions/Hoverable.ahk
 
 class EventDispatcher {
     static hoverables := []

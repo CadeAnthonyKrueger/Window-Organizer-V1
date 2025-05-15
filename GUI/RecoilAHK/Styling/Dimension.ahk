@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0
-#Include ../Utils/PixelCalc.ahk
+
+#Include ./Utils/PixelCalc.ahk
 #Include ./StyleAspect.ahk
 
 class Dimension extends StyleAspect {
@@ -16,7 +17,7 @@ class Dimension extends StyleAspect {
 
     Resolve(parent) {
         x := 0, y := 0, w := 0, h := 0
-        if parent != 0 {
+        if parent {
             parent.GetClientPos(&x, &y, &w, &h)
         }
         this.x := x + PixelCalc.ToPixels(this.relativeX, w)

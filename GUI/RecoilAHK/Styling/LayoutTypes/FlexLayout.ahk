@@ -28,7 +28,7 @@ class FlexLayout {
             this.AlignComponent(dim, container.GetDimensions())
             node.SetPositionResolved()
         }
-        if (this.justify = "start") {
+        if (this.justify == "start") {
             return
         }
         ; Second pass resolves children based on the justification of the parent

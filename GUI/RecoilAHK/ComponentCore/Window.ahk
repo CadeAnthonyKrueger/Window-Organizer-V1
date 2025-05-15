@@ -27,6 +27,7 @@ class Window extends Component {
             TraySetIcon(validParams["appIconPath"])
         }
         ;CoordMode("Mouse", "Screen")
+        this.parentWindow := this
         this.windowTitle := validParams["windowTitle"]
         this.gui := Gui(validParams["guiParams"], this.windowTitle)
         this.componentManager := ComponentManager()

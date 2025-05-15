@@ -1,8 +1,9 @@
 #Requires AutoHotkey v2.0
+
 #Include ./Dimension.ahk
 #Include ./Alignment.ahk
 #Include ./Appearance.ahk
-#Include ../Utils/StyleMapper.ahk
+#Include ./Utils/StyleMapper.ahk
 
 class Style {
     __New(dimension := Dimension(), alignment := Alignment(), appearance := Appearance()) {
