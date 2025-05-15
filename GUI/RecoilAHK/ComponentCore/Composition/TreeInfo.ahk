@@ -22,8 +22,6 @@ class TreeInfo {
     GetZIndex() {
         return component.style.alignment.zIndex
     }
-
-
 }
 
 
