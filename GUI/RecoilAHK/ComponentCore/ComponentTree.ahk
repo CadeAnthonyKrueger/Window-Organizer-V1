@@ -14,7 +14,7 @@ class ComponentTree {
     ; O(k + m) worst case, where k is the length of a given parentChildList and m is the length of a given depth's parentChildLists
     Add(component) {
         ; depth => distance from the root; parentGroupIndex => parent's index reference to it's children in the layer below
-        component.GetRenderInfo(&depth, &parentGroupIndex)
+        component.GetTreeInfo(&depth, &parentGroupIndex)
         ; Create new layer if not already exists
         if !this.nestedTree.Has(depth) or this.nestedTree[depth] = "" {
             this.nestedTree[depth] := Map("parentChildLists", [])
@@ -23,16 +23,16 @@ class ComponentTree {
         ; Create new list of children (corresponding to a single parent in the layer above) if not already exists for a given depth
         if parentGroupIndex = "" {
             ; Insert group in proper order based on parent ordering (updating other group indexes as you go)
-            getParent := (el) => this.nestedTree[depth - 1][el.parentGroupIndex][el.parentIndex]
+            getParent := (el) => this.nestedTree[depth - 1][el.GetParentGroupIndex()][el.GetParentListIndex()]
             parentGroupIndex := ArrayHelper.ReverseInsert(
                 arr := currentDepth["parentChildLists"],
                 el := { 
                     parentGroup: parentGroupIndex, 
-                    parentIndex: component.parent.listIndex,
+                    parentIndex: component.GetParentListIndex(),
                     list: []
                 },
                 func := (el) => getParent(el).SetChildGroupIndex((prev) => prev + 1),
-                cond := (el1, el2) => getParent(el1).listIndex < getParent(el2).listIndex
+                cond := (el1, el2) => getParent(el1).GetListIndex() < getParent(el2).GetListIndex()
             )
             component.SetParentGroupIndex((prev) => parentGroupIndex)
         }
@@ -51,14 +51,14 @@ class ComponentTree {
         stack := Stack(component)
         while stack.Length > 0 {
             currentComponent := stack.Pop()
-            currentComponent.GetRenderInfo(&depth, &parentGroupIndex, &listIndex)
+            currentComponent.GetTreeInfo(&depth, &parentGroupIndex, &listIndex)
             this.nestedTree[depth]["parentChildLists"][parentGroupIndex].list[listIndex] := ""
             this.removedIndexes.Push(
                 Map("depth", depth, "parentGroupIndex", parentGroupIndex, "listIndex", listIndex)
             )
             
             ; Add child components to the stack for later removal
-            for childComponent in currentComponent.children {
+            for childComponent in currentComponent.GetChildren() {
                 stack.Push(childComponent)
             }
         }
@@ -77,7 +77,7 @@ class ComponentTree {
             catch 
                 return
         }        
-        startingComponent.GetRenderInfo(&depth, &parentGroupIndex, &listIndex)
+        startingComponent.GetTreeInfo(&depth, &parentGroupIndex, &listIndex)
         ; Here we iterate every component on the same depth level as or below our component
         onFirstIteration := true
         currentDepthIndex := depth
@@ -116,7 +116,7 @@ class ComponentTree {
             }
             parentChildLists := this.nestedTree[emptySpace["depth"]]["parentChildLists"]
             ; Represents the layer above. Used to adjust parent child group indexes accordingly
-            parentLists := this.nestedTree[emptySpace["depth"] - 1]["parentChildLists"]
+            try parentLists := this.nestedTree[emptySpace["depth"] - 1]["parentChildLists"]
             componentGroup := parentChildLists[emptySpace["parentGroupIndex"]]
             componentGroup.list.RemoveAt(emptySpace["listIndex"])
             ; Shift all subsequent component's list index by -1
@@ -129,8 +129,10 @@ class ComponentTree {
             if componentGroup.list.Length == 0 {
                 parentChildLists.RemoveAt(emptySpace["parentGroupIndex"])
                 ; Update parent index ref to it's child group in the depth below, shifting by -1
-                for group in ArrayHelper.SliceArray(parentChildLists, emptySpace["parentGroupIndex"]) {
-                    parentLists[group.parentGroup][group.parentIndex].SetChildGroupIndex((prev) => prev - 1)
+                try {
+                    for group in ArrayHelper.SliceArray(parentChildLists, emptySpace["parentGroupIndex"]) {
+                        parentLists[group.parentGroup][group.parentIndex].SetChildGroupIndex((prev) => prev - 1)
+                    }
                 }
                 
                 ; If this results in an entire depth being empty, this is the lowest depth in the tree and can be removed
@@ -155,7 +157,7 @@ class ComponentTree {
             if !IsObject(root)
                 continue
             try {
-                addToTreeString("", root.name, root.GetZIndex(), root.depth, root.childGroupIndex, root.listIndex)
+                addToTreeString("", root.name, root.GetZIndex(), root.GetDepth(), root.GetChildGroupIndex(), root.GetListIndex())
                 stack := Stack()
                 stack.Push(Map("component", root, "indent", "`t"))
     
@@ -168,7 +170,7 @@ class ComponentTree {
                         if !IsObject(child)
                             continue
                         try {
-                            addToTreeString(indent, child.name, child.GetZIndex(), child.depth, child.childGroupIndex, child.listIndex)
+                            addToTreeString(indent, child.name, child.GetZIndex(), child.GetDepth(), child.GetChildGroupIndex(), child.GetListIndex())
                             stack.Push(Map("component", child, "indent", indent . "`t"))
                         }
                     }

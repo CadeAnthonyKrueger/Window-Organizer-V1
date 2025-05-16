@@ -3,12 +3,19 @@
 class TreeInfo {
     __New(component, depth) {
         this.component := component 
+        this.depth := depth
         this.childGroupIndex := unset
         this.listIndex := unset
     }
 
+    GetTreeInfo(&depth, &parentGroupIndex, &listIndex) {
+        depth := this.depth
+        parentGroupIndex := this.GetParentGroupIndex()
+        listIndex := this.listIndex
+    }
+
     SetParentGroupIndex(callback) {
-        component.relationships.parent.childGroupIndex := this.parent ? callback(this.parent.childGroupIndex) : 1
+        this.component.relationships.parent.treeInfo.childGroupIndex := this.component.parent ? callback(this.component.parent.childGroupIndex) : 1
     }
 
     SetChildGroupIndex(callback) {
@@ -19,8 +26,24 @@ class TreeInfo {
         this.listIndex := callback(this.listIndex)
     }
 
-    GetZIndex() {
-        return component.style.alignment.zIndex
+    GetParentGroupIndex() {
+        return this.component.relationships.parent.treeInfo.childGroupIndex
+    }
+
+    GetParentListIndex() {
+        return this.component.relationships.parent.treeInfo.listIndex
+    }
+
+    GetChildGroupIndex() {
+        return this.childGroupIndex
+    }
+
+    GetListIndex() {
+        return this.listIndex
+    }
+
+    GetDepth() {
+        return this.depth
     }
 }
 

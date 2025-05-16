@@ -1,17 +1,21 @@
 #Requires AutoHotkey v2.0 
 
-class ComponentRelationships {
+class Relationships {
     __New(component, parentWindow, parent) {
         this.component := component
         this.parentWindow := parentWindow
         this.parent := parent
         this.children := []
+        this.componentManager := this.parentWindow.GetComponentManager()
     }
 
     AddChild(name, styleSheet, inlineStyle := {}) {
-        componentManager := this.parentWindow.GetComponentManager()
-        child := componentManager.CreateComponent(name, styleSheet, inlineStyle, this.parentWindow, this, this.component.depth + 1)
+        child := this.componentManager.CreateComponent(name, styleSheet, inlineStyle, this.parentWindow, this, this.component.depth + 1)
         this.children.Push(child)
         return child
+    }
+
+    GetComponentManager() {
+        return this.componentManager
     }
 }
