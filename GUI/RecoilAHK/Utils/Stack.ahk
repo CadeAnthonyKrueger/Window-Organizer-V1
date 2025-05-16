@@ -28,4 +28,20 @@ class Stack {
         this.items := []
         this.length := this.items.Length
     }
+
+    static CreateChildStack(startingElement, callback := () => "") {
+        stack := Stack()
+        queue := Stack(startingElement)
+
+        ; Fill stack with full subtree
+        while queue.Length > 0 {
+            current := queue.Pop()
+            stack.Push(current)
+            callback(current)
+            for child in callback(current) {
+                queue.Push(child)
+            }
+        }
+        return stack
+    }
 }

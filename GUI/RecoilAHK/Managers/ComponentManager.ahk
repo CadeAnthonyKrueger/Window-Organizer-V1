@@ -12,26 +12,17 @@ class ComponentManager {
     }
 
     CreateComponent(name, styleSheet, inlineStyle, parent) {
-        newComponent := this.componentFactory.GetElement({ name: name, styleSheet: styleSheet, inlineStyle: inlineStyle, parent: parent})
+        newComponent := this.componentFactory.GetElement({ 
+            name: name, styleSheet: styleSheet, inlineStyle: inlineStyle, parent: parent
+        })
         this.componentTree.Add(newComponent)
         return newComponent
     }
 
-    ; O(k) where k is the number of child components
+    ; Need to remove all children of the removed component as well. Our tree will never have any orphaned nodes.
     RemoveComponent(component) {
-        stack := Stack()
-        queue := Stack(component)
-
-        ; Fill stack with full subtree
-        while queue.Length > 0 {
-            current := queue.Pop()
-            stack.Push(current)
-
-            for child in current.GetChildren() {
-                queue.Push(child)
-            }
-        }
-
+        ; Create a stack so lowest level children will be processed before parents
+        stack := Stack.CreateChildStack(component, (current) => current.GetChildren())
         ; Deinitialize from leaf to root
         while stack.Length > 0 {
             current := stack.Pop()
