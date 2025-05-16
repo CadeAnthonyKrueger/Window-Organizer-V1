@@ -1,7 +1,6 @@
 #Requires AutoHotkey v2.0 
 
 #Include ../Utils/ArrayHelper.ahk
-#Include ../Utils/Stack.ahk
 
 ; ComponentTree is responsible for keeping a structured ordering of all the active components for a given window.
 ; This is used to perform efficient operations on components as well as keep things in proper order for rendering.
@@ -46,22 +45,13 @@ class ComponentTree {
         component.SetListIndex((prev) => listIndex)
     }
 
-    ; O(k) where k is the number of child components, added time if tree needs to compact afterwards
+    ; O(1), added time if tree needs to compact afterwards
     Remove(component, initialCall := true) {
-        stack := Stack(component)
-        while stack.Length > 0 {
-            currentComponent := stack.Pop()
-            currentComponent.GetTreeInfo(&depth, &parentGroupIndex, &listIndex)
-            this.nestedTree[depth]["parentChildLists"][parentGroupIndex].list[listIndex] := ""
-            this.removedIndexes.Push(
-                Map("depth", depth, "parentGroupIndex", parentGroupIndex, "listIndex", listIndex)
-            )
-            
-            ; Add child components to the stack for later removal
-            for childComponent in currentComponent.GetChildren() {
-                stack.Push(childComponent)
-            }
-        }
+        component.GetTreeInfo(&depth, &parentGroupIndex, &listIndex)
+        this.nestedTree[depth]["parentChildLists"][parentGroupIndex].list[listIndex] := ""
+        this.removedIndexes.Push(
+            Map("depth", depth, "parentGroupIndex", parentGroupIndex, "listIndex", listIndex)
+        )
         ; If the tree has too many empty values, we want to compact it
         if this.removedIndexes.Length >= 75 and initialCall {
             this.CondenseTree()

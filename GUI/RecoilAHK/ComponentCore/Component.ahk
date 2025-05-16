@@ -32,7 +32,7 @@ class Component {
         this.treeInfo := TreeInfo(this, validParams["depth"])
         this.positioner := Positioner(this)
         this.style := StyleBuilder.Build(validParams["name"], validParams["styleSheet"], validParams["inlineStyle"])
-        this.eventHandler := EventHandler(component)
+        this.eventHandler := EventHandler(this)
     }
 
     ; Free up all memory used by component's instance specific data, remove component from relevant locations (component tree and parent's children)
