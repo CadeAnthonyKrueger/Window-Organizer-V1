@@ -24,7 +24,7 @@ class WindowManager {
     }
 
     static Initialize() {
-        this.GetInstance().Initialize()
+        WindowManager.GetInstance().Initialize()
     }
 
     Initialize() {
