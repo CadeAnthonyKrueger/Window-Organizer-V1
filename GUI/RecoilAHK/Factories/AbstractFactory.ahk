@@ -12,7 +12,7 @@ class AbstractFactory {
         if newElement == "" {
             newElement := this.CreateNew()
         }
-        newElement.Initialize(ObjOwnProps(params))
+        newElement.Initialize(params)
         return newElement
     }
 

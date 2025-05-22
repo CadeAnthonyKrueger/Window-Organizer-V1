@@ -1,7 +1,9 @@
 #Requires AutoHotkey v2.0
 
-#Include ../Core/StyleAspect.ahk
-#Include ../Core/Style.ahk
+#Include ../Dimension.ahk
+#Include ../Alignment.ahk
+#Include ../Appearance.ahk
+#Include ../Style.ahk
 
 class StyleMapper {
 

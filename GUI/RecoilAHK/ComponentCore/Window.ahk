@@ -16,21 +16,20 @@ class Window extends Component {
     }
 
     Initialize(params) {
-        splitParams := MapHelper.SplitMap(params, ["name", "styleSheet", "inlineStyle"], ["appIconPath", "guiParams", "windowTitle"])
+        this.componentManager := ComponentManager()
+        splitParams := MapHelper.SplitMap(params, ["name", "styleSheet", "inlineStyle"], ["iconPath", "guiParams", "windowTitle"])
         super.Initialize(splitParams[1])
-
-        validParams := Map("appIconPath", "", "guiParams", "-Caption +AlwaysOnTop", "windowTitle", "")
+        MsgBox("HE")
+        validParams := Map("iconPath", "", "guiParams", "-Caption +AlwaysOnTop", "windowTitle", "")
         validParams := Validator.ValidateParams(splitParams[2], validParams)
 
 
-        if validParams["appIconPath"] {
-            TraySetIcon(validParams["appIconPath"])
+        if validParams["iconPath"] {
+            TraySetIcon(validParams["iconPath"])
         }
         ;CoordMode("Mouse", "Screen")
-        this.parentWindow := this
         this.windowTitle := validParams["windowTitle"]
         this.gui := Gui(validParams["guiParams"], this.windowTitle)
-        this.componentManager := ComponentManager()
         this.depth := 0
         ;Cursor.Initialize()
     }

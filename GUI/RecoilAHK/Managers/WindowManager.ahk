@@ -2,6 +2,7 @@
 #SingleInstance Force
 
 #Include ../Factories/WindowFactory.ahk
+#Include ../Utils/MapHelper.ahk
 
 class WindowManager {
     static instance := ""
@@ -11,7 +12,7 @@ class WindowManager {
         if !WindowManager.allowConstruction
             throw "WindowManager is a singleton and cannot be instantiated directly. Use GetInstance()."
         this.windowFactory := unset
-        this.windowRegistry := Map()
+        this.windowRegistry := unset
     }
 
     static GetInstance() {
@@ -29,6 +30,7 @@ class WindowManager {
 
     Initialize() {
         this.windowFactory := WindowFactory()
+        this.windowRegistry := Map()
     }
 
     static CreateRootWindow(entryPoint, appName, appIconPath, styleSheet, inlineStyle, guiParams) {
@@ -49,7 +51,7 @@ class WindowManager {
             name: name, windowTitle: windowTitle, iconPath: iconPath, 
             styleSheet: styleSheet, inlineStyle: inlineStyle, guiParams: guiParams
         })
-        currentWindow := this.windowRegistry[name]
+        currentWindow := this.windowRegistry.Set(name)
         ; Initialize all components and build up the component tree starting from the provided entry point for a given window
         entryPoint(currentWindow).Create()
         ; Once all components are initialized, resolve absolute and relative layouts recursively, starting from the given window
@@ -62,6 +64,6 @@ class WindowManager {
     }
 
     ShowWindow(windowName) {
-        this.windowRegistry[windowName].Show()
+        this.windowRegistry.Get(windowName).Show()
     }
 }

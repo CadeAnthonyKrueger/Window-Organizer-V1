@@ -1,18 +1,28 @@
 #Requires AutoHotkey v2.0 
 
 class MapHelper {
-    static SplitMap(map, keys1, keys2) {
+    static SplitMap(mapToSplit, keys1, keys2) {
         newMap1 := Map()
         newMap2 := Map()
 
-        maxLength := Max(keys1.Length, keys2.Length)
-        for index in maxLength {
-            if keys1.Length >= index
-                newMap1[keys1[index]] := map[keys1[index]]
-            if keys2.Length >= index
-                newMap2[keys2[index]] := map[keys2[index]]
+        for key in keys1 {
+            newMap1[key] := mapToSplit.%key%
+        }
+
+        for key in keys2 {
+            newMap2[key] := mapToSplit.%key%
         }
 
         return [newMap1, newMap2]
+    }
+
+    static PrintMap(mapOrObj) {
+        str := ""
+        for key in ObjOwnProps(mapOrObj) {
+            try str .= Format("{} => {}`n", key, mapOrObj.%key%)
+            catch
+                str .= key " => [Error displaying value]`n"
+        }
+        MsgBox str
     }
 }

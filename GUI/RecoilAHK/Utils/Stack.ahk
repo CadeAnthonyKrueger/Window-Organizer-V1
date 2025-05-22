@@ -12,8 +12,12 @@ class Stack {
     }
 
     Pop() {
-        return this.items.Length > 0 ? this.items.Pop() : ""
-        this.length := this.items.Length
+        if this.items.Length > 0 {
+            item := this.items.Pop()
+            this.length := this.items.Length
+            return item
+        }
+        return ""
     }
 
     Peek() {
@@ -37,7 +41,6 @@ class Stack {
         while queue.Length > 0 {
             current := queue.Pop()
             stack.Push(current)
-            callback(current)
             for child in callback(current) {
                 queue.Push(child)
             }

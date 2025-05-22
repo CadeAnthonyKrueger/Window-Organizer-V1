@@ -15,7 +15,7 @@ class Validator {
 
         ; Check required parameters
         for key in requiredParams {
-            if !IsSet(validParams[key]) || validParams[key] = ""
+            if validParams[key] = ""
                 throw Error(Format("Missing required parameter: '{}'", key))
         }
 

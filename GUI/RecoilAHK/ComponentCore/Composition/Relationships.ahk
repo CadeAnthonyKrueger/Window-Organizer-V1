@@ -6,7 +6,7 @@ class Relationships {
         this.parentWindow := parentWindow
         this.parent := parent
         this.children := []
-        this.componentManager := this.parentWindow.GetComponentManager()
+        this.componentManager := parentWindow.GetComponentManager()
     }
 
     AddChild(name, styleSheet, inlineStyle := {}) {
