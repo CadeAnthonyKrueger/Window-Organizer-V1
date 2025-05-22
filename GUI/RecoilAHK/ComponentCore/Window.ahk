@@ -16,12 +16,13 @@ class Window extends Component {
     }
 
     Initialize(params) {
+        MsgBox(params.name)
+        MapHelper.PrintMap(params)
         this.componentManager := ComponentManager()
-        splitParams := MapHelper.SplitMap(params, ["name", "styleSheet", "inlineStyle"], ["iconPath", "guiParams", "windowTitle"])
-        super.Initialize(splitParams[1])
-        MsgBox("HE")
+        ;splitParams := MapHelper.SplitMap(params, ["name", "styleSheet", "inlineStyle", "parentWindow", "parent", "depth"], ["iconPath", "guiParams", "windowTitle"])
+        super.Initialize(params)
         validParams := Map("iconPath", "", "guiParams", "-Caption +AlwaysOnTop", "windowTitle", "")
-        validParams := Validator.ValidateParams(splitParams[2], validParams)
+        validParams := Validator.ValidateParams(params, validParams)
 
 
         if validParams["iconPath"] {

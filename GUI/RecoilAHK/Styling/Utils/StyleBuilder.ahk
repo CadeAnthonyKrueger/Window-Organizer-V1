@@ -13,8 +13,10 @@ class StyleBuilder {
         for key, value in styleMap {
             StyleBuilder.styleMapper.Add(key, value)
         }
-        for key, value in ObjOwnProps(inlineStyle) {
-            StyleBuilder.styleMapper.Add(key, value)
+        if inlineStyle != "" {
+            for key in ObjOwnProps(inlineStyle) {
+                StyleBuilder.styleMapper.Add(key, inlineStyle.%key%)
+            }
         }
         return StyleBuilder.styleMapper.GetStyleObject()
     }

@@ -11,9 +11,9 @@ class ComponentManager {
         this.componentTree := ComponentTree()
     }
 
-    CreateComponent(name, styleSheet, inlineStyle, parent) {
+    CreateComponent(name, styleSheet, inlineStyle, parentWindow, parent, depth) {
         newComponent := this.componentFactory.GetElement({ 
-            name: name, styleSheet: styleSheet, inlineStyle: inlineStyle, parent: parent
+            name: name, styleSheet: styleSheet, inlineStyle: inlineStyle, parentWindow: parentWindow, parent: parent, depth: depth
         })
         this.componentTree.Add(newComponent)
         return newComponent

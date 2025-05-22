@@ -51,7 +51,7 @@ class WindowManager {
             name: name, windowTitle: windowTitle, iconPath: iconPath, 
             styleSheet: styleSheet, inlineStyle: inlineStyle, guiParams: guiParams
         })
-        currentWindow := this.windowRegistry.Set(name)
+        currentWindow := this.windowRegistry.Get(name)
         ; Initialize all components and build up the component tree starting from the provided entry point for a given window
         entryPoint(currentWindow).Create()
         ; Once all components are initialized, resolve absolute and relative layouts recursively, starting from the given window

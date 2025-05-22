@@ -24,19 +24,17 @@ class Component {
     
     ; Initialize the component with instance specific paramaters, separate from __New so the factory can reuse components
     Initialize(params) {
-        MsgBox("Initializing Component")
+        MsgBox(params.name)
+        MapHelper.PrintMap(params)
         validParams := Map("name", "", "styleSheet", "", "inlineStyle", {}, "parentWindow", this, "parent", "", "depth", 0)
         validParams := Validator.ValidateParams(params, validParams, ["name"])
 
         this.name := validParams["name"]
-        MsgBox(Format("Component Named", this.name))
         this.relationships := Relationships(this, validParams["parentWindow"], validParams["parent"])
-        MsgBox(Format("Component Rels", this.name))
         this.treeInfo := TreeInfo(this, validParams["depth"])
         this.positioner := Positioner(this)
         this.style := StyleBuilder.Build(validParams["name"], validParams["styleSheet"], validParams["inlineStyle"])
         this.eventHandler := EventHandler(this)
-        MsgBox(Format("Component Initialized", this.name))
     }
 
     ; Free up all memory used by component's instance specific data, remove component from relevant locations (component tree and parent's children)
@@ -65,6 +63,8 @@ class Component {
 
     ; Relationship Methods for handling the dynamic beween a component and its parent, children, parent window, and manager
     AddChild(name, styleSheet, inlineStyle := {}) {
+        MsgBox(name)
+        MsgBox(styleSheet)
         return this.relationships.AddChild(name, styleSheet, inlineStyle)
     }
 
